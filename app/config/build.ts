@@ -3,9 +3,6 @@ export const getBuildConfig = () => {
     throw Error('[Server Config] you are importing a nodejs-only module outside of nodejs');
   }
 
-  const buildMode = process.env.BUILD_MODE ?? 'standalone';
-  const isApp = !!process.env.BUILD_APP;
-
   const commitInfo = (() => {
     try {
       const childProcess = require('child_process');
@@ -28,11 +25,7 @@ export const getBuildConfig = () => {
     }
   })();
 
-  return {
-    ...commitInfo,
-    buildMode,
-    isApp,
-  };
+  return commitInfo;
 };
 
 export type BuildConfig = ReturnType<typeof getBuildConfig>;

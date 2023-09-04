@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { getHeaders } from '../client/api';
-import { getClientConfig } from '../config/client';
-import { DEFAULT_API_HOST, DEFAULT_MODELS, StoreKey } from '../constant';
+import { DEFAULT_MODELS, StoreKey } from '../constant';
 
 export interface AccessControlStore {
   accessCode: string;
@@ -25,8 +24,7 @@ export interface AccessControlStore {
 
 let fetchState = 0; // 0 not fetch, 1 fetching, 2 done
 
-const DEFAULT_OPENAI_URL =
-  getClientConfig()?.buildMode === 'export' ? DEFAULT_API_HOST : '/api/openai/';
+const DEFAULT_OPENAI_URL = '/api/openai/';
 console.log('[API] default openai url', DEFAULT_OPENAI_URL);
 
 export const useAccessStore = create<AccessControlStore>()(
@@ -62,7 +60,7 @@ export const useAccessStore = create<AccessControlStore>()(
         return !!get().token || !!get().accessCode || !get().enabledAccessControl();
       },
       fetch() {
-        if (fetchState > 0 || getClientConfig()?.buildMode === 'export') return;
+        if (fetchState > 0) return;
         fetchState = 1;
         fetch('/api/config', {
           method: 'post',

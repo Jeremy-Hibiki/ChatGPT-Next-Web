@@ -2,10 +2,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api } from '../client/api';
 import { getClientConfig } from '../config/client';
-import { FETCH_COMMIT_URL, FETCH_TAG_URL, StoreKey } from '../constant';
+import { FETCH_COMMIT_URL, StoreKey } from '../constant';
 
 export interface UpdateStore {
-  versionType: 'date' | 'tag';
   lastUpdate: number;
   version: string;
   remoteVersion: string;
@@ -33,30 +32,21 @@ function formatVersionDate(t: string) {
   );
 }
 
-async function getVersion(type: 'date' | 'tag') {
-  if (type === 'date') {
-    const data = (await (await fetch(FETCH_COMMIT_URL)).json()) as {
-      commit: {
-        author: { name: string; date: string };
-      };
-      sha: string;
-    }[];
-    const remoteCommitTime = data[0].commit.author.date;
-    const remoteId = new Date(remoteCommitTime).getTime().toString();
-    return remoteId;
-  } else if (type === 'tag') {
-    const data = (await (await fetch(FETCH_TAG_URL)).json()) as {
-      commit: { sha: string; url: string };
-      name: string;
-    }[];
-    return data.at(0)?.name;
-  }
+async function getVersion() {
+  const data = (await (await fetch(FETCH_COMMIT_URL)).json()) as {
+    commit: {
+      author: { name: string; date: string };
+    };
+    sha: string;
+  }[];
+  const remoteCommitTime = data[0].commit.author.date;
+  const remoteId = new Date(remoteCommitTime).getTime().toString();
+  return remoteId;
 }
 
 export const useUpdateStore = create<UpdateStore>()(
   persist(
     (set, get) => ({
-      versionType: 'tag',
       lastUpdate: 0,
       version: 'unknown',
       remoteVersion: '',
@@ -64,16 +54,11 @@ export const useUpdateStore = create<UpdateStore>()(
       lastUpdateUsage: 0,
 
       formatVersion(version: string) {
-        if (get().versionType === 'date') {
-          version = formatVersionDate(version);
-        }
-        return version;
+        return formatVersionDate(version);
       },
 
       async getLatestVersion(force = false) {
-        const versionType = get().versionType;
-        let version =
-          versionType === 'date' ? getClientConfig()?.commitDate : getClientConfig()?.version;
+        let version = getClientConfig()?.commitDate;
 
         set(() => ({ version }));
 
@@ -85,7 +70,7 @@ export const useUpdateStore = create<UpdateStore>()(
         }));
 
         try {
-          const remoteId = await getVersion(versionType);
+          const remoteId = await getVersion();
           set(() => ({
             remoteVersion: remoteId,
           }));

@@ -21,7 +21,6 @@ import { MessageSelector, useMessageSelector } from './message-selector';
 
 import { toBlob, toPng } from 'html-to-image';
 import { api } from '../client/api';
-import { getClientConfig } from '../config/client';
 import { EXPORT_MESSAGE_CLASS_NAME } from '../constant';
 import { DEFAULT_MASK_AVATAR } from '../store/mask';
 import { prettyObject } from '../utils/format';
@@ -383,7 +382,7 @@ export function ImagePreviewer(props: { messages: ChatMessage[]; topic: string }
       .then((blob) => {
         if (!blob) return;
 
-        if (isMobile || getClientConfig()?.isApp) {
+        if (isMobile) {
           showImageModal(blob);
         } else {
           const link = document.createElement('a');

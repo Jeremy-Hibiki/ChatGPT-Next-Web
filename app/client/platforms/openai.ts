@@ -1,7 +1,6 @@
-import { DEFAULT_API_HOST, DEFAULT_MODELS, OpenaiPath, REQUEST_TIMEOUT_MS } from '@/app/constant';
+import { DEFAULT_MODELS, OpenaiPath, REQUEST_TIMEOUT_MS } from '@/app/constant';
 import { useAccessStore, useAppConfig, useChatStore } from '@/app/store';
 
-import { getClientConfig } from '@/app/config/client';
 import { prettyObject } from '@/app/utils/format';
 import { EventStreamContentType, fetchEventSource } from '@fortaine/fetch-event-source';
 import Locale from '../../locales';
@@ -24,8 +23,7 @@ export class ChatGPTApi implements LLMApi {
     const apiPath = '/api/openai';
 
     if (openaiUrl.length === 0) {
-      const isApp = !!getClientConfig()?.isApp;
-      openaiUrl = isApp ? DEFAULT_API_HOST : apiPath;
+      openaiUrl = apiPath;
     }
     if (openaiUrl.endsWith('/')) {
       openaiUrl = openaiUrl.slice(0, openaiUrl.length - 1);

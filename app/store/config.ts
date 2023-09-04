@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { LLMModel } from '../client/api';
-import { getClientConfig } from '../config/client';
 import { DEFAULT_INPUT_TEMPLATE, DEFAULT_MODELS, StoreKey } from '../constant';
 
 export type ModelType = (typeof DEFAULT_MODELS)[number]['name'];
@@ -25,7 +24,7 @@ export const DEFAULT_CONFIG = {
   avatar: '1f603',
   fontSize: 14,
   theme: Theme.Auto as Theme,
-  tightBorder: !!getClientConfig()?.isApp,
+  tightBorder: false,
   sendPreviewBubble: true,
   enableAutoGenerateTitle: true,
   sidebarWidth: 300,
