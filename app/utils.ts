@@ -8,11 +8,7 @@ export function trimTopic(topic: string) {
 
 export async function copyToClipboard(text: string) {
   try {
-    if (window.__TAURI__) {
-      window.__TAURI__.writeText(text);
-    } else {
-      await navigator.clipboard.writeText(text);
-    }
+    await navigator.clipboard.writeText(text);
 
     showToast(Locale.Copy.Success);
   } catch (error) {
