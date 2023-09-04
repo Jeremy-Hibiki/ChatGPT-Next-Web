@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import Fuse from "fuse.js";
-import { getLang } from "../locales";
-import { StoreKey } from "../constant";
-import { nanoid } from "nanoid";
+import Fuse from 'fuse.js';
+import { nanoid } from 'nanoid';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { StoreKey } from '../constant';
+import { getLang } from '../locales';
 
 export interface Prompt {
   id: string;
@@ -28,8 +28,8 @@ export interface PromptStore {
 
 export const SearchService = {
   ready: false,
-  builtinEngine: new Fuse<Prompt>([], { keys: ["title"] }),
-  userEngine: new Fuse<Prompt>([], { keys: ["title"] }),
+  builtinEngine: new Fuse<Prompt>([], { keys: ['title'] }),
+  userEngine: new Fuse<Prompt>([], { keys: ['title'] }),
   count: {
     builtin: 0,
   },
@@ -107,16 +107,14 @@ export const usePromptStore = create<PromptStore>()(
 
       getUserPrompts() {
         const userPrompts = Object.values(get().prompts ?? {});
-        userPrompts.sort((a, b) =>
-          b.id && a.id ? b.createdAt - a.createdAt : 0,
-        );
+        userPrompts.sort((a, b) => (b.id && a.id ? b.createdAt - a.createdAt : 0));
         return userPrompts;
       },
 
       update(id, updater) {
         const prompt = get().prompts[id] ?? {
-          title: "",
-          content: "",
+          title: '',
+          content: '',
           id,
         };
 
@@ -151,7 +149,7 @@ export const usePromptStore = create<PromptStore>()(
       },
 
       onRehydrateStorage(state) {
-        const PROMPT_URL = "./prompts.json";
+        const PROMPT_URL = './prompts.json';
 
         type PromptList = Array<[string, string]>;
 
@@ -159,25 +157,22 @@ export const usePromptStore = create<PromptStore>()(
           .then((res) => res.json())
           .then((res) => {
             let fetchPrompts = [res.en, res.cn];
-            if (getLang() === "cn") {
+            if (getLang() === 'cn') {
               fetchPrompts = fetchPrompts.reverse();
             }
-            const builtinPrompts = fetchPrompts.map(
-              (promptList: PromptList) => {
-                return promptList.map(
-                  ([title, content]) =>
-                    ({
-                      id: nanoid(),
-                      title,
-                      content,
-                      createdAt: Date.now(),
-                    } as Prompt),
-                );
-              },
-            );
+            const builtinPrompts = fetchPrompts.map((promptList: PromptList) => {
+              return promptList.map(
+                ([title, content]) =>
+                  ({
+                    id: nanoid(),
+                    title,
+                    content,
+                    createdAt: Date.now(),
+                  }) as Prompt,
+              );
+            });
 
-            const userPrompts =
-              usePromptStore.getState().getUserPrompts() ?? [];
+            const userPrompts = usePromptStore.getState().getUserPrompts() ?? [];
 
             const allPromptsForSearch = builtinPrompts
               .reduce((pre, cur) => pre.concat(cur), [])

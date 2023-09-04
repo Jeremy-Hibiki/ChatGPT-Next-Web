@@ -1,19 +1,17 @@
-import tauriConfig from "../../src-tauri/tauri.conf.json";
+import tauriConfig from '../../src-tauri/tauri.conf.json';
 
 export const getBuildConfig = () => {
-  if (typeof process === "undefined") {
-    throw Error(
-      "[Server Config] you are importing a nodejs-only module outside of nodejs",
-    );
+  if (typeof process === 'undefined') {
+    throw Error('[Server Config] you are importing a nodejs-only module outside of nodejs');
   }
 
-  const buildMode = process.env.BUILD_MODE ?? "standalone";
+  const buildMode = process.env.BUILD_MODE ?? 'standalone';
   const isApp = !!process.env.BUILD_APP;
-  const version = "v" + tauriConfig.package.version;
+  const version = 'v' + tauriConfig.package.version;
 
   const commitInfo = (() => {
     try {
-      const childProcess = require("child_process");
+      const childProcess = require('child_process');
       const commitDate: string = childProcess
         .execSync('git log -1 --format="%at000" --date=unix')
         .toString()
@@ -25,10 +23,10 @@ export const getBuildConfig = () => {
 
       return { commitDate, commitHash };
     } catch (e) {
-      console.error("[Build Config] No git or not from git repo.");
+      console.error('[Build Config] No git or not from git repo.');
       return {
-        commitDate: "unknown",
-        commitHash: "unknown",
+        commitDate: 'unknown',
+        commitHash: 'unknown',
       };
     }
   })();

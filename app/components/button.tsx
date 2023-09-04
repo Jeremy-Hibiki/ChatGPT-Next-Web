@@ -1,8 +1,6 @@
-import * as React from "react";
+import styles from './button.module.scss';
 
-import styles from "./button.module.scss";
-
-export type ButtonType = "primary" | "danger" | null;
+export type ButtonType = 'primary' | 'danger' | null;
 
 export function IconButton(props: {
   onClick?: () => void;
@@ -20,10 +18,10 @@ export function IconButton(props: {
   return (
     <button
       className={
-        styles["icon-button"] +
+        styles['icon-button'] +
         ` ${props.bordered && styles.border} ${props.shadow && styles.shadow} ${
-          props.className ?? ""
-        } clickable ${styles[props.type ?? ""]}`
+          props.className ?? ''
+        } clickable ${styles[props.type ?? '']}`
       }
       onClick={props.onClick}
       title={props.title}
@@ -33,19 +31,12 @@ export function IconButton(props: {
       autoFocus={props.autoFocus}
     >
       {props.icon && (
-        <div
-          className={
-            styles["icon-button-icon"] +
-            ` ${props.type === "primary" && "no-dark"}`
-          }
-        >
+        <div className={styles['icon-button-icon'] + ` ${props.type === 'primary' && 'no-dark'}`}>
           {props.icon}
         </div>
       )}
 
-      {props.text && (
-        <div className={styles["icon-button-text"]}>{props.text}</div>
-      )}
+      {props.text && <div className={styles['icon-button-text']}>{props.text}</div>}
     </button>
   );
 }

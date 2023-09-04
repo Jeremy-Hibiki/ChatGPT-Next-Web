@@ -1,10 +1,10 @@
-import { type OpenAIListModelResponse } from "@/app/client/platforms/openai";
-import { getServerSideConfig } from "@/app/config/server";
-import { OpenaiPath } from "@/app/constant";
-import { prettyObject } from "@/app/utils/format";
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../auth";
-import { requestOpenai } from "../../common";
+import { type OpenAIListModelResponse } from '@/app/client/platforms/openai';
+import { getServerSideConfig } from '@/app/config/server';
+import { OpenaiPath } from '@/app/constant';
+import { prettyObject } from '@/app/utils/format';
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '../../auth';
+import { requestOpenai } from '../../common';
 
 const ALLOWD_PATH = new Set(Object.values(OpenaiPath));
 
@@ -12,32 +12,27 @@ function getModels(remoteModelRes: OpenAIListModelResponse) {
   const config = getServerSideConfig();
 
   if (config.disableGPT4) {
-    remoteModelRes.data = remoteModelRes.data.filter(
-      (m) => !m.id.startsWith("gpt-4"),
-    );
+    remoteModelRes.data = remoteModelRes.data.filter((m) => !m.id.startsWith('gpt-4'));
   }
 
   return remoteModelRes;
 }
 
-async function handle(
-  req: NextRequest,
-  { params }: { params: { path: string[] } },
-) {
-  console.log("[OpenAI Route] params ", params);
+async function handle(req: NextRequest, { params }: { params: { path: string[] } }) {
+  console.log('[OpenAI Route] params ', params);
 
-  if (req.method === "OPTIONS") {
-    return NextResponse.json({ body: "OK" }, { status: 200 });
+  if (req.method === 'OPTIONS') {
+    return NextResponse.json({ body: 'OK' }, { status: 200 });
   }
 
-  const subpath = params.path.join("/");
+  const subpath = params.path.join('/');
 
   if (!ALLOWD_PATH.has(subpath)) {
-    console.log("[OpenAI Route] forbidden path ", subpath);
+    console.log('[OpenAI Route] forbidden path ', subpath);
     return NextResponse.json(
       {
         error: true,
-        msg: "you are not allowed to request " + subpath,
+        msg: 'you are not allowed to request ' + subpath,
       },
       {
         status: 403,
@@ -66,7 +61,7 @@ async function handle(
 
     return response;
   } catch (e) {
-    console.error("[OpenAI] ", e);
+    console.error('[OpenAI] ', e);
     return NextResponse.json(prettyObject(e));
   }
 }
@@ -74,4 +69,4 @@ async function handle(
 export const GET = handle;
 export const POST = handle;
 
-export const runtime = "edge";
+export const runtime = 'edge';

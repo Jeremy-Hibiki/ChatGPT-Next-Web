@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { showToast } from "./components/ui-lib";
-import Locale from "./locales";
+import { useEffect, useState } from 'react';
+import { showToast } from './components/ui-lib';
+import Locale from './locales';
 
 export function trimTopic(topic: string) {
-  return topic.replace(/[，。！？”“"、,.!?]*$/, "");
+  return topic.replace(/[，。！？”“"、,.!?]*$/, '');
 }
 
 export async function copyToClipboard(text: string) {
@@ -16,13 +16,13 @@ export async function copyToClipboard(text: string) {
 
     showToast(Locale.Copy.Success);
   } catch (error) {
-    const textArea = document.createElement("textarea");
+    const textArea = document.createElement('textarea');
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
     try {
-      document.execCommand("copy");
+      document.execCommand('copy');
       showToast(Locale.Copy.Success);
     } catch (error) {
       showToast(Locale.Copy.Failed);
@@ -32,14 +32,11 @@ export async function copyToClipboard(text: string) {
 }
 
 export function downloadAs(text: string, filename: string) {
-  const element = document.createElement("a");
-  element.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8," + encodeURIComponent(text),
-  );
-  element.setAttribute("download", filename);
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
 
-  element.style.display = "none";
+  element.style.display = 'none';
   document.body.appendChild(element);
 
   element.click();
@@ -49,9 +46,9 @@ export function downloadAs(text: string, filename: string) {
 
 export function readFromFile() {
   return new Promise<string>((res, rej) => {
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "application/json";
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'application/json';
 
     fileInput.onchange = (event: any) => {
       const file = event.target.files[0];
@@ -86,10 +83,10 @@ export function useWindowSize() {
       });
     };
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
 
     return () => {
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
@@ -104,15 +101,13 @@ export function useMobileScreen() {
 }
 
 export function isFirefox() {
-  return (
-    typeof navigator !== "undefined" && /firefox/i.test(navigator.userAgent)
-  );
+  return typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent);
 }
 
 export function selectOrCopy(el: HTMLElement, content: string) {
   const currentSelection = window.getSelection();
 
-  if (currentSelection?.type === "Range") {
+  if (currentSelection?.type === 'Range') {
     return false;
   }
 
@@ -123,8 +118,7 @@ export function selectOrCopy(el: HTMLElement, content: string) {
 
 function getDomContentWidth(dom: HTMLElement) {
   const style = window.getComputedStyle(dom);
-  const paddingWidth =
-    parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+  const paddingWidth = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
   const width = dom.clientWidth - paddingWidth;
   return width;
 }
@@ -133,13 +127,13 @@ function getOrCreateMeasureDom(id: string, init?: (dom: HTMLElement) => void) {
   let dom = document.getElementById(id);
 
   if (!dom) {
-    dom = document.createElement("span");
-    dom.style.position = "absolute";
-    dom.style.wordBreak = "break-word";
-    dom.style.fontSize = "14px";
-    dom.style.transform = "translateY(-200vh)";
-    dom.style.pointerEvents = "none";
-    dom.style.opacity = "0";
+    dom = document.createElement('span');
+    dom.style.position = 'absolute';
+    dom.style.wordBreak = 'break-word';
+    dom.style.fontSize = '14px';
+    dom.style.transform = 'translateY(-200vh)';
+    dom.style.pointerEvents = 'none';
+    dom.style.opacity = '0';
     dom.id = id;
     document.body.appendChild(dom);
     init?.(dom);
@@ -149,23 +143,20 @@ function getOrCreateMeasureDom(id: string, init?: (dom: HTMLElement) => void) {
 }
 
 export function autoGrowTextArea(dom: HTMLTextAreaElement) {
-  const measureDom = getOrCreateMeasureDom("__measure");
-  const singleLineDom = getOrCreateMeasureDom("__single_measure", (dom) => {
-    dom.innerText = "TEXT_FOR_MEASURE";
+  const measureDom = getOrCreateMeasureDom('__measure');
+  const singleLineDom = getOrCreateMeasureDom('__single_measure', (dom) => {
+    dom.innerText = 'TEXT_FOR_MEASURE';
   });
 
   const width = getDomContentWidth(dom);
-  measureDom.style.width = width + "px";
-  measureDom.innerText = dom.value !== "" ? dom.value : "1";
+  measureDom.style.width = width + 'px';
+  measureDom.innerText = dom.value !== '' ? dom.value : '1';
   measureDom.style.fontSize = dom.style.fontSize;
-  const endWithEmptyLine = dom.value.endsWith("\n");
+  const endWithEmptyLine = dom.value.endsWith('\n');
   const height = parseFloat(window.getComputedStyle(measureDom).height);
-  const singleLineHeight = parseFloat(
-    window.getComputedStyle(singleLineDom).height,
-  );
+  const singleLineHeight = parseFloat(window.getComputedStyle(singleLineDom).height);
 
-  const rows =
-    Math.round(height / singleLineHeight) + (endWithEmptyLine ? 1 : 0);
+  const rows = Math.round(height / singleLineHeight) + (endWithEmptyLine ? 1 : 0);
 
   return rows;
 }

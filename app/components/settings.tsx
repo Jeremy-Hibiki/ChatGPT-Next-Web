@@ -1,15 +1,16 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import styles from "./settings.module.scss";
+import styles from './settings.module.scss';
 
-import ResetIcon from "../icons/reload.svg";
-import AddIcon from "../icons/add.svg";
-import CloseIcon from "../icons/close.svg";
-import CopyIcon from "../icons/copy.svg";
-import ClearIcon from "../icons/clear.svg";
-import LoadingIcon from "../icons/three-dots.svg";
-import EditIcon from "../icons/edit.svg";
-import EyeIcon from "../icons/eye.svg";
+import AddIcon from '../icons/add.svg';
+import ClearIcon from '../icons/clear.svg';
+import CloseIcon from '../icons/close.svg';
+import CopyIcon from '../icons/copy.svg';
+import EditIcon from '../icons/edit.svg';
+import EyeIcon from '../icons/eye.svg';
+import ResetIcon from '../icons/reload.svg';
+import LoadingIcon from '../icons/three-dots.svg';
+import { ModelConfigList } from './model-config';
 import {
   Input,
   List,
@@ -19,36 +20,30 @@ import {
   Popover,
   Select,
   showConfirm,
-} from "./ui-lib";
-import { ModelConfigList } from "./model-config";
+} from './ui-lib';
 
-import { IconButton } from "./button";
 import {
   SubmitKey,
-  useChatStore,
   Theme,
-  useUpdateStore,
   useAccessStore,
   useAppConfig,
-} from "../store";
+  useChatStore,
+  useUpdateStore,
+} from '../store';
+import { IconButton } from './button';
 
-import Locale, {
-  AllLangs,
-  ALL_LANG_OPTIONS,
-  changeLang,
-  getLang,
-} from "../locales";
-import { copyToClipboard } from "../utils";
-import Link from "next/link";
-import { Path, RELEASE_URL, UPDATE_URL } from "../constant";
-import { Prompt, SearchService, usePromptStore } from "../store/prompt";
-import { ErrorBoundary } from "./error";
-import { InputRange } from "./input-range";
-import { useNavigate } from "react-router-dom";
-import { Avatar, AvatarPicker } from "./emoji";
-import { getClientConfig } from "../config/client";
-import { useSyncStore } from "../store/sync";
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
+import Link from 'next/link';
+import { useNavigate } from 'react-router-dom';
+import { getClientConfig } from '../config/client';
+import { Path, RELEASE_URL, UPDATE_URL } from '../constant';
+import Locale, { AllLangs, ALL_LANG_OPTIONS, changeLang, getLang } from '../locales';
+import { Prompt, SearchService, usePromptStore } from '../store/prompt';
+import { useSyncStore } from '../store/sync';
+import { copyToClipboard } from '../utils';
+import { Avatar, AvatarPicker } from './emoji';
+import { ErrorBoundary } from './error';
+import { InputRange } from './input-range';
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();
@@ -59,38 +54,25 @@ function EditPromptModal(props: { id: string; onClose: () => void }) {
       <Modal
         title={Locale.Settings.Prompt.EditModal.Title}
         onClose={props.onClose}
-        actions={[
-          <IconButton
-            key=""
-            onClick={props.onClose}
-            text={Locale.UI.Confirm}
-            bordered
-          />,
-        ]}
+        actions={[<IconButton key="" onClick={props.onClose} text={Locale.UI.Confirm} bordered />]}
       >
-        <div className={styles["edit-prompt-modal"]}>
+        <div className={styles['edit-prompt-modal']}>
           <input
             type="text"
             value={prompt.title}
             readOnly={!prompt.isUser}
-            className={styles["edit-prompt-title"]}
+            className={styles['edit-prompt-title']}
             onInput={(e) =>
-              promptStore.update(
-                props.id,
-                (prompt) => (prompt.title = e.currentTarget.value),
-              )
+              promptStore.update(props.id, (prompt) => (prompt.title = e.currentTarget.value))
             }
           ></input>
           <Input
             value={prompt.content}
             readOnly={!prompt.isUser}
-            className={styles["edit-prompt-content"]}
+            className={styles['edit-prompt-content']}
             rows={10}
             onInput={(e) =>
-              promptStore.update(
-                props.id,
-                (prompt) => (prompt.content = e.currentTarget.value),
-              )
+              promptStore.update(props.id, (prompt) => (prompt.content = e.currentTarget.value))
             }
           ></Input>
         </div>
@@ -104,7 +86,7 @@ function UserPromptModal(props: { onClose?: () => void }) {
   const userPrompts = promptStore.getUserPrompts();
   const builtinPrompts = SearchService.builtinPrompts;
   const allPrompts = userPrompts.concat(builtinPrompts);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [searchPrompts, setSearchPrompts] = useState<Prompt[]>([]);
   const prompts = searchInput.length > 0 ? searchPrompts : allPrompts;
 
@@ -131,8 +113,8 @@ function UserPromptModal(props: { onClose?: () => void }) {
               promptStore.add({
                 id: nanoid(),
                 createdAt: Date.now(),
-                title: "Empty Prompt",
-                content: "Empty Prompt Content",
+                title: 'Empty Prompt',
+                content: 'Empty Prompt Content',
               })
             }
             icon={<AddIcon />}
@@ -141,49 +123,47 @@ function UserPromptModal(props: { onClose?: () => void }) {
           />,
         ]}
       >
-        <div className={styles["user-prompt-modal"]}>
+        <div className={styles['user-prompt-modal']}>
           <input
             type="text"
-            className={styles["user-prompt-search"]}
+            className={styles['user-prompt-search']}
             placeholder={Locale.Settings.Prompt.Modal.Search}
             value={searchInput}
             onInput={(e) => setSearchInput(e.currentTarget.value)}
           ></input>
 
-          <div className={styles["user-prompt-list"]}>
+          <div className={styles['user-prompt-list']}>
             {prompts.map((v, _) => (
-              <div className={styles["user-prompt-item"]} key={v.id ?? v.title}>
-                <div className={styles["user-prompt-header"]}>
-                  <div className={styles["user-prompt-title"]}>{v.title}</div>
-                  <div className={styles["user-prompt-content"] + " one-line"}>
-                    {v.content}
-                  </div>
+              <div className={styles['user-prompt-item']} key={v.id ?? v.title}>
+                <div className={styles['user-prompt-header']}>
+                  <div className={styles['user-prompt-title']}>{v.title}</div>
+                  <div className={styles['user-prompt-content'] + ' one-line'}>{v.content}</div>
                 </div>
 
-                <div className={styles["user-prompt-buttons"]}>
+                <div className={styles['user-prompt-buttons']}>
                   {v.isUser && (
                     <IconButton
                       icon={<ClearIcon />}
-                      className={styles["user-prompt-button"]}
+                      className={styles['user-prompt-button']}
                       onClick={() => promptStore.remove(v.id!)}
                     />
                   )}
                   {v.isUser ? (
                     <IconButton
                       icon={<EditIcon />}
-                      className={styles["user-prompt-button"]}
+                      className={styles['user-prompt-button']}
                       onClick={() => setEditingPromptId(v.id)}
                     />
                   ) : (
                     <IconButton
                       icon={<EyeIcon />}
-                      className={styles["user-prompt-button"]}
+                      className={styles['user-prompt-button']}
                       onClick={() => setEditingPromptId(v.id)}
                     />
                   )}
                   <IconButton
                     icon={<CopyIcon />}
-                    className={styles["user-prompt-button"]}
+                    className={styles['user-prompt-button']}
                     onClick={() => copyToClipboard(v.content)}
                   />
                 </div>
@@ -194,10 +174,7 @@ function UserPromptModal(props: { onClose?: () => void }) {
       </Modal>
 
       {editingPromptId !== undefined && (
-        <EditPromptModal
-          id={editingPromptId!}
-          onClose={() => setEditingPromptId(undefined)}
-        />
+        <EditPromptModal id={editingPromptId!} onClose={() => setEditingPromptId(undefined)} />
       )}
     </div>
   );
@@ -251,8 +228,8 @@ function SyncItems() {
   return (
     <List>
       <ListItem
-        title={"上次同步：" + new Date().toLocaleString()}
-        subTitle={"20 次对话，100 条消息，200 提示词，20 面具"}
+        title={'上次同步：' + new Date().toLocaleString()}
+        subTitle={'20 次对话，100 条消息，200 提示词，20 面具'}
       >
         <IconButton
           icon={<ResetIcon />}
@@ -264,22 +241,17 @@ function SyncItems() {
       </ListItem>
 
       <ListItem
-        title={"本地备份"}
-        subTitle={"20 次对话，100 条消息，200 提示词，20 面具"}
+        title={'本地备份'}
+        subTitle={'20 次对话，100 条消息，200 提示词，20 面具'}
       ></ListItem>
 
-      <ListItem
-        title={"Web Dav Server"}
-        subTitle={Locale.Settings.AccessCode.SubTitle}
-      >
+      <ListItem title={'Web Dav Server'} subTitle={Locale.Settings.AccessCode.SubTitle}>
         <input
           value={webdav.server}
           type="text"
-          placeholder={"https://example.com"}
+          placeholder={'https://example.com'}
           onChange={(e) => {
-            syncStore.update(
-              (config) => (config.server = e.currentTarget.value),
-            );
+            syncStore.update((config) => (config.server = e.currentTarget.value));
           }}
         />
       </ListItem>
@@ -288,11 +260,9 @@ function SyncItems() {
         <input
           value={webdav.username}
           type="text"
-          placeholder={"username"}
+          placeholder={'username'}
           onChange={(e) => {
-            syncStore.update(
-              (config) => (config.username = e.currentTarget.value),
-            );
+            syncStore.update((config) => (config.username = e.currentTarget.value));
           }}
         />
       </ListItem>
@@ -301,11 +271,9 @@ function SyncItems() {
         <input
           value={webdav.password}
           type="text"
-          placeholder={"password"}
+          placeholder={'password'}
           onChange={(e) => {
-            syncStore.update(
-              (config) => (config.password = e.currentTarget.value),
-            );
+            syncStore.update((config) => (config.password = e.currentTarget.value));
           }}
         />
       </ListItem>
@@ -332,8 +300,8 @@ export function Settings() {
       setCheckingUpdate(false);
     });
 
-    console.log("[Update] local version ", updateStore.version);
-    console.log("[Update] remote version ", updateStore.remoteVersion);
+    console.log('[Update] local version ', updateStore.version);
+    console.log('[Update] remote version ', updateStore.remoteVersion);
   }
 
   const usage = {
@@ -374,13 +342,13 @@ export function Settings() {
 
   useEffect(() => {
     const keydownEvent = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         navigate(Path.Home);
       }
     };
-    document.addEventListener("keydown", keydownEvent);
+    document.addEventListener('keydown', keydownEvent);
     return () => {
-      document.removeEventListener("keydown", keydownEvent);
+      document.removeEventListener('keydown', keydownEvent);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -392,26 +360,18 @@ export function Settings() {
     <ErrorBoundary>
       <div className="window-header" data-tauri-drag-region>
         <div className="window-header-title">
-          <div className="window-header-main-title">
-            {Locale.Settings.Title}
-          </div>
-          <div className="window-header-sub-title">
-            {Locale.Settings.SubTitle}
-          </div>
+          <div className="window-header-main-title">{Locale.Settings.Title}</div>
+          <div className="window-header-sub-title">{Locale.Settings.SubTitle}</div>
         </div>
         <div className="window-actions">
           <div className="window-action-button"></div>
           <div className="window-action-button"></div>
           <div className="window-action-button">
-            <IconButton
-              icon={<CloseIcon />}
-              onClick={() => navigate(Path.Home)}
-              bordered
-            />
+            <IconButton icon={<CloseIcon />} onClick={() => navigate(Path.Home)} bordered />
           </div>
         </div>
       </div>
-      <div className={styles["settings"]}>
+      <div className={styles['settings']}>
         <List>
           <ListItem title={Locale.Settings.Avatar}>
             <Popover
@@ -426,22 +386,19 @@ export function Settings() {
               }
               open={showEmojiPicker}
             >
-              <div
-                className={styles.avatar}
-                onClick={() => setShowEmojiPicker(true)}
-              >
+              <div className={styles.avatar} onClick={() => setShowEmojiPicker(true)}>
                 <Avatar avatar={config.avatar} />
               </div>
             </Popover>
           </ListItem>
 
           <ListItem
-            title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
+            title={Locale.Settings.Update.Version(currentVersion ?? 'unknown')}
             subTitle={
               checkingUpdate
                 ? Locale.Settings.Update.IsChecking
                 : hasNewVersion
-                ? Locale.Settings.Update.FoundUpdate(remoteId ?? "ERROR")
+                ? Locale.Settings.Update.FoundUpdate(remoteId ?? 'ERROR')
                 : Locale.Settings.Update.IsLatest
             }
           >
@@ -464,10 +421,7 @@ export function Settings() {
             <Select
               value={config.submitKey}
               onChange={(e) => {
-                updateConfig(
-                  (config) =>
-                    (config.submitKey = e.target.value as any as SubmitKey),
-                );
+                updateConfig((config) => (config.submitKey = e.target.value as any as SubmitKey));
               }}
             >
               {Object.values(SubmitKey).map((v) => (
@@ -482,9 +436,7 @@ export function Settings() {
             <Select
               value={config.theme}
               onChange={(e) => {
-                updateConfig(
-                  (config) => (config.theme = e.target.value as any as Theme),
-                );
+                updateConfig((config) => (config.theme = e.target.value as any as Theme));
               }}
             >
               {Object.values(Theme).map((v) => (
@@ -521,10 +473,7 @@ export function Settings() {
               max="18"
               step="1"
               onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.fontSize = Number.parseInt(e.currentTarget.value)),
-                )
+                updateConfig((config) => (config.fontSize = Number.parseInt(e.currentTarget.value)))
               }
             ></InputRange>
           </ListItem>
@@ -537,10 +486,7 @@ export function Settings() {
               type="checkbox"
               checked={config.enableAutoGenerateTitle}
               onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.enableAutoGenerateTitle = e.currentTarget.checked),
-                )
+                updateConfig((config) => (config.enableAutoGenerateTitle = e.currentTarget.checked))
               }
             ></input>
           </ListItem>
@@ -553,10 +499,7 @@ export function Settings() {
               type="checkbox"
               checked={config.sendPreviewBubble}
               onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.sendPreviewBubble = e.currentTarget.checked),
-                )
+                updateConfig((config) => (config.sendPreviewBubble = e.currentTarget.checked))
               }
             ></input>
           </ListItem>
@@ -572,9 +515,7 @@ export function Settings() {
               checked={!config.dontShowMaskSplashScreen}
               onChange={(e) =>
                 updateConfig(
-                  (config) =>
-                    (config.dontShowMaskSplashScreen =
-                      !e.currentTarget.checked),
+                  (config) => (config.dontShowMaskSplashScreen = !e.currentTarget.checked),
                 )
               }
             ></input>
@@ -588,10 +529,7 @@ export function Settings() {
               type="checkbox"
               checked={config.hideBuiltinMasks}
               onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.hideBuiltinMasks = e.currentTarget.checked),
-                )
+                updateConfig((config) => (config.hideBuiltinMasks = e.currentTarget.checked))
               }
             ></input>
           </ListItem>
@@ -606,20 +544,14 @@ export function Settings() {
               type="checkbox"
               checked={config.disablePromptHint}
               onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.disablePromptHint = e.currentTarget.checked),
-                )
+                updateConfig((config) => (config.disablePromptHint = e.currentTarget.checked))
               }
             ></input>
           </ListItem>
 
           <ListItem
             title={Locale.Settings.Prompt.List}
-            subTitle={Locale.Settings.Prompt.ListCount(
-              builtinCount,
-              customCount,
-            )}
+            subTitle={Locale.Settings.Prompt.ListCount(builtinCount, customCount)}
           >
             <IconButton
               icon={<EditIcon />}
@@ -658,9 +590,7 @@ export function Settings() {
                   type="text"
                   value={accessStore.openaiUrl}
                   placeholder="https://api.openai.com/"
-                  onChange={(e) =>
-                    accessStore.updateOpenAiUrl(e.currentTarget.value)
-                  }
+                  onChange={(e) => accessStore.updateOpenAiUrl(e.currentTarget.value)}
                 ></input>
               </ListItem>
               <ListItem
@@ -687,8 +617,8 @@ export function Settings() {
                   ? loadingUsage
                     ? Locale.Settings.Usage.IsChecking
                     : Locale.Settings.Usage.SubTitle(
-                        usage?.used ?? "[?]",
-                        usage?.subscription ?? "[?]",
+                        usage?.used ?? '[?]',
+                        usage?.subscription ?? '[?]',
                       )
                   : Locale.Settings.Usage.NoAccess
               }
@@ -714,9 +644,7 @@ export function Settings() {
               value={config.customModels}
               placeholder="model1,model2,model3"
               onChange={(e) =>
-                config.update(
-                  (config) => (config.customModels = e.currentTarget.value),
-                )
+                config.update((config) => (config.customModels = e.currentTarget.value))
               }
             ></input>
           </ListItem>
@@ -735,9 +663,7 @@ export function Settings() {
           />
         </List>
 
-        {shouldShowPromptModal && (
-          <UserPromptModal onClose={() => setShowPromptModal(false)} />
-        )}
+        {shouldShowPromptModal && <UserPromptModal onClose={() => setShowPromptModal(false)} />}
 
         <DangerItems />
       </div>

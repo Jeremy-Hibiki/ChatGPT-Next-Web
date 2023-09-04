@@ -1,57 +1,52 @@
-"use client";
+'use client';
 
-require("../polyfill");
+require('../polyfill');
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 
-import styles from "./home.module.scss";
+import styles from './home.module.scss';
 
-import BotIcon from "../icons/bot.svg";
-import LoadingIcon from "../icons/three-dots.svg";
+import BotIcon from '../icons/bot.svg';
+import LoadingIcon from '../icons/three-dots.svg';
 
-import { getCSSVar, useMobileScreen } from "../utils";
+import { getCSSVar, useMobileScreen } from '../utils';
 
-import dynamic from "next/dynamic";
-import { Path, SlotID } from "../constant";
-import { ErrorBoundary } from "./error";
+import dynamic from 'next/dynamic';
+import { Path, SlotID } from '../constant';
+import { ErrorBoundary } from './error';
 
-import { getISOLang, getLang } from "../locales";
+import { getISOLang, getLang } from '../locales';
 
-import {
-  HashRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
-import { SideBar } from "./sidebar";
-import { useAppConfig } from "../store/config";
-import { AuthPage } from "./auth";
-import { getClientConfig } from "../config/client";
-import { api } from "../client/api";
-import { useAccessStore } from "../store";
+import { HashRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { api } from '../client/api';
+import { getClientConfig } from '../config/client';
+import { useAccessStore } from '../store';
+import { useAppConfig } from '../store/config';
+import { AuthPage } from './auth';
+import { SideBar } from './sidebar';
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
-    <div className={styles["loading-content"] + " no-dark"}>
+    <div className={styles['loading-content'] + ' no-dark'}>
       {!props.noLogo && <BotIcon />}
       <LoadingIcon />
     </div>
   );
 }
 
-const Settings = dynamic(async () => (await import("./settings")).Settings, {
+const Settings = dynamic(async () => (await import('./settings')).Settings, {
   loading: () => <Loading noLogo />,
 });
 
-const Chat = dynamic(async () => (await import("./chat")).Chat, {
+const Chat = dynamic(async () => (await import('./chat')).Chat, {
   loading: () => <Loading noLogo />,
 });
 
-const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
+const NewChat = dynamic(async () => (await import('./new-chat')).NewChat, {
   loading: () => <Loading noLogo />,
 });
 
-const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
+const MaskPage = dynamic(async () => (await import('./mask')).MaskPage, {
   loading: () => <Loading noLogo />,
 });
 
@@ -59,29 +54,25 @@ export function useSwitchTheme() {
   const config = useAppConfig();
 
   useEffect(() => {
-    document.body.classList.remove("light");
-    document.body.classList.remove("dark");
+    document.body.classList.remove('light');
+    document.body.classList.remove('dark');
 
-    if (config.theme === "dark") {
-      document.body.classList.add("dark");
-    } else if (config.theme === "light") {
-      document.body.classList.add("light");
+    if (config.theme === 'dark') {
+      document.body.classList.add('dark');
+    } else if (config.theme === 'light') {
+      document.body.classList.add('light');
     }
 
-    const metaDescriptionDark = document.querySelector(
-      'meta[name="theme-color"][media*="dark"]',
-    );
-    const metaDescriptionLight = document.querySelector(
-      'meta[name="theme-color"][media*="light"]',
-    );
+    const metaDescriptionDark = document.querySelector('meta[name="theme-color"][media*="dark"]');
+    const metaDescriptionLight = document.querySelector('meta[name="theme-color"][media*="light"]');
 
-    if (config.theme === "auto") {
-      metaDescriptionDark?.setAttribute("content", "#151515");
-      metaDescriptionLight?.setAttribute("content", "#fafafa");
+    if (config.theme === 'auto') {
+      metaDescriptionDark?.setAttribute('content', '#151515');
+      metaDescriptionLight?.setAttribute('content', '#fafafa');
     } else {
-      const themeColor = getCSSVar("--theme-color");
-      metaDescriptionDark?.setAttribute("content", themeColor);
-      metaDescriptionLight?.setAttribute("content", themeColor);
+      const themeColor = getCSSVar('--theme-color');
+      metaDescriptionDark?.setAttribute('content', themeColor);
+      metaDescriptionLight?.setAttribute('content', themeColor);
     }
   }, [config.theme]);
 }
@@ -108,14 +99,12 @@ const useHasHydrated = () => {
 };
 
 const loadAsyncGoogleFont = () => {
-  const linkEl = document.createElement("link");
-  const proxyFontUrl = "/google-fonts";
-  const remoteFontUrl = "https://fonts.googleapis.com";
-  const googleFontUrl =
-    getClientConfig()?.buildMode === "export" ? remoteFontUrl : proxyFontUrl;
-  linkEl.rel = "stylesheet";
-  linkEl.href =
-    googleFontUrl + "/css2?family=Noto+Sans:wght@300;400;700;900&display=swap";
+  const linkEl = document.createElement('link');
+  const proxyFontUrl = '/google-fonts';
+  const remoteFontUrl = 'https://fonts.googleapis.com';
+  const googleFontUrl = getClientConfig()?.buildMode === 'export' ? remoteFontUrl : proxyFontUrl;
+  linkEl.rel = 'stylesheet';
+  linkEl.href = googleFontUrl + '/css2?family=Noto+Sans:wght@300;400;700;900&display=swap';
   document.head.appendChild(linkEl);
 };
 
@@ -134,11 +123,9 @@ function Screen() {
     <div
       className={
         styles.container +
-        ` ${
-          config.tightBorder && !isMobileScreen
-            ? styles["tight-container"]
-            : styles.container
-        } ${getLang() === "ar" ? styles["rtl-screen"] : ""}`
+        ` ${config.tightBorder && !isMobileScreen ? styles['tight-container'] : styles.container} ${
+          getLang() === 'ar' ? styles['rtl-screen'] : ''
+        }`
       }
     >
       {isAuth ? (
@@ -147,9 +134,9 @@ function Screen() {
         </>
       ) : (
         <>
-          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+          <SideBar className={isHome ? styles['sidebar-show'] : ''} />
 
-          <div className={styles["window-content"]} id={SlotID.AppBody}>
+          <div className={styles['window-content']} id={SlotID.AppBody}>
             <Routes>
               <Route path={Path.Home} element={<Chat />} />
               <Route path={Path.NewChat} element={<NewChat />} />
@@ -182,7 +169,7 @@ export function Home() {
   useHtmlLang();
 
   useEffect(() => {
-    console.log("[Config] got config from build time", getClientConfig());
+    console.log('[Config] got config from build time', getClientConfig());
     useAccessStore.getState().fetch();
   }, []);
 

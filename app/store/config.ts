@@ -1,28 +1,28 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { LLMModel } from "../client/api";
-import { getClientConfig } from "../config/client";
-import { DEFAULT_INPUT_TEMPLATE, DEFAULT_MODELS, StoreKey } from "../constant";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { LLMModel } from '../client/api';
+import { getClientConfig } from '../config/client';
+import { DEFAULT_INPUT_TEMPLATE, DEFAULT_MODELS, StoreKey } from '../constant';
 
-export type ModelType = (typeof DEFAULT_MODELS)[number]["name"];
+export type ModelType = (typeof DEFAULT_MODELS)[number]['name'];
 
 export enum SubmitKey {
-  Enter = "Enter",
-  CtrlEnter = "Ctrl + Enter",
-  ShiftEnter = "Shift + Enter",
-  AltEnter = "Alt + Enter",
-  MetaEnter = "Meta + Enter",
+  Enter = 'Enter',
+  CtrlEnter = 'Ctrl + Enter',
+  ShiftEnter = 'Shift + Enter',
+  AltEnter = 'Alt + Enter',
+  MetaEnter = 'Meta + Enter',
 }
 
 export enum Theme {
-  Auto = "auto",
-  Dark = "dark",
-  Light = "light",
+  Auto = 'auto',
+  Dark = 'dark',
+  Light = 'light',
 }
 
 export const DEFAULT_CONFIG = {
   submitKey: SubmitKey.CtrlEnter as SubmitKey,
-  avatar: "1f603",
+  avatar: '1f603',
   fontSize: 14,
   theme: Theme.Auto as Theme,
   tightBorder: !!getClientConfig()?.isApp,
@@ -35,11 +35,11 @@ export const DEFAULT_CONFIG = {
   dontShowMaskSplashScreen: false, // dont show splash screen when create chat
   hideBuiltinMasks: false, // dont add builtin masks
 
-  customModels: "",
+  customModels: '',
   models: DEFAULT_MODELS as any as LLMModel[],
 
   modelConfig: {
-    model: "gpt-3.5-turbo" as ModelType,
+    model: 'gpt-3.5-turbo' as ModelType,
     temperature: 0.5,
     top_p: 1,
     max_tokens: 2000,
@@ -62,15 +62,10 @@ export type ChatConfigStore = ChatConfig & {
   allModels: () => LLMModel[];
 };
 
-export type ModelConfig = ChatConfig["modelConfig"];
+export type ModelConfig = ChatConfig['modelConfig'];
 
-export function limitNumber(
-  x: number,
-  min: number,
-  max: number,
-  defaultValue: number,
-) {
-  if (typeof x !== "number" || isNaN(x)) {
+export function limitNumber(x: number, min: number, max: number, defaultValue: number) {
+  if (typeof x !== 'number' || isNaN(x)) {
     return defaultValue;
   }
 
@@ -138,7 +133,7 @@ export const useAppConfig = create<ChatConfigStore>()(
 
       allModels() {
         const customModels = get()
-          .customModels.split(",")
+          .customModels.split(',')
           .filter((v) => !!v && v.length > 0)
           .map((m) => ({ name: m, available: true }));
 
@@ -164,7 +159,7 @@ export const useAppConfig = create<ChatConfigStore>()(
         }
 
         if (version < 3.5) {
-          state.customModels = "claude,claude-100k";
+          state.customModels = 'claude,claude-100k';
         }
 
         if (version < 3.6) {

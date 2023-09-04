@@ -1,11 +1,11 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { BUILTIN_MASKS } from "../masks";
-import { getLang, Lang } from "../locales";
-import { DEFAULT_TOPIC, ChatMessage } from "./chat";
-import { ModelConfig, useAppConfig } from "./config";
-import { StoreKey } from "../constant";
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { StoreKey } from '../constant';
+import { getLang, Lang } from '../locales';
+import { BUILTIN_MASKS } from '../masks';
+import { ChatMessage, DEFAULT_TOPIC } from './chat';
+import { ModelConfig, useAppConfig } from './config';
 
 export type Mask = {
   id: string;
@@ -34,7 +34,7 @@ type MaskStore = MaskState & {
   getAll: () => Mask[];
 };
 
-export const DEFAULT_MASK_AVATAR = "gpt-bot";
+export const DEFAULT_MASK_AVATAR = 'gpt-bot';
 export const createEmptyMask = () =>
   ({
     id: nanoid(),
@@ -46,7 +46,7 @@ export const createEmptyMask = () =>
     lang: getLang(),
     builtin: false,
     createdAt: Date.now(),
-  } as Mask);
+  }) as Mask;
 
 export const useMaskStore = create<MaskStore>()(
   persist(
@@ -86,9 +86,7 @@ export const useMaskStore = create<MaskStore>()(
         return get().masks[id ?? 1145141919810];
       },
       getAll() {
-        const userMasks = Object.values(get().masks).sort(
-          (a, b) => b.createdAt - a.createdAt,
-        );
+        const userMasks = Object.values(get().masks).sort((a, b) => b.createdAt - a.createdAt);
         const config = useAppConfig.getState();
         if (config.hideBuiltinMasks) return userMasks;
         const buildinMasks = BUILTIN_MASKS.map(
@@ -99,7 +97,7 @@ export const useMaskStore = create<MaskStore>()(
                 ...config.modelConfig,
                 ...m.modelConfig,
               },
-            } as Mask),
+            }) as Mask,
         );
         return userMasks.concat(buildinMasks);
       },

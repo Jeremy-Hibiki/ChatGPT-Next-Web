@@ -1,7 +1,7 @@
-import { Updater } from "../typing";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { StoreKey } from "../constant";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { StoreKey } from '../constant';
+import { Updater } from '../typing';
 
 export interface WebDavConfig {
   server: string;
@@ -21,16 +21,16 @@ export interface SyncStore {
 }
 
 const FILE = {
-  root: "/chatgpt-next-web/",
+  root: '/chatgpt-next-web/',
 };
 
 export const useSyncStore = create<SyncStore>()(
   persist(
     (set, get) => ({
       webDavConfig: {
-        server: "",
-        username: "",
-        password: "",
+        server: '',
+        username: '',
+        password: '',
       },
 
       lastSyncTime: 0,
@@ -43,14 +43,14 @@ export const useSyncStore = create<SyncStore>()(
 
       async check() {
         try {
-          const res = await fetch(this.path(""), {
-            method: "PROFIND",
+          const res = await fetch(this.path(''), {
+            method: 'PROFIND',
             headers: this.headers(),
           });
           console.log(res);
           return res.status === 207;
         } catch (e) {
-          console.error("[Sync] ", e);
+          console.error('[Sync] ', e);
           return false;
         }
       },
@@ -58,11 +58,11 @@ export const useSyncStore = create<SyncStore>()(
       path(path: string) {
         let url = get().webDavConfig.server;
 
-        if (!url.endsWith("/")) {
-          url += "/";
+        if (!url.endsWith('/')) {
+          url += '/';
         }
 
-        if (path.startsWith("/")) {
+        if (path.startsWith('/')) {
           path = path.slice(1);
         }
 
@@ -70,9 +70,7 @@ export const useSyncStore = create<SyncStore>()(
       },
 
       headers() {
-        const auth = btoa(
-          [get().webDavConfig.username, get().webDavConfig.password].join(":"),
-        );
+        const auth = btoa([get().webDavConfig.username, get().webDavConfig.password].join(':'));
 
         return {
           Authorization: `Basic ${auth}`,

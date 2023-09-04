@@ -1,14 +1,14 @@
-import styles from "./auth.module.scss";
-import { IconButton } from "./button";
+import styles from './auth.module.scss';
+import { IconButton } from './button';
 
-import { useNavigate } from "react-router-dom";
-import { Path } from "../constant";
-import { useAccessStore } from "../store";
-import Locale from "../locales";
+import { useNavigate } from 'react-router-dom';
+import { Path } from '../constant';
+import Locale from '../locales';
+import { useAccessStore } from '../store';
 
-import BotIcon from "../icons/bot.svg";
-import { useEffect } from "react";
-import { getClientConfig } from "../config/client";
+import { useEffect } from 'react';
+import { getClientConfig } from '../config/client';
+import BotIcon from '../icons/bot.svg';
 
 export function AuthPage() {
   const navigate = useNavigate();
@@ -24,16 +24,16 @@ export function AuthPage() {
   }, []);
 
   return (
-    <div className={styles["auth-page"]}>
-      <div className={`no-dark ${styles["auth-logo"]}`}>
+    <div className={styles['auth-page']}>
+      <div className={`no-dark ${styles['auth-logo']}`}>
         <BotIcon />
       </div>
 
-      <div className={styles["auth-title"]}>{Locale.Auth.Title}</div>
-      <div className={styles["auth-tips"]}>{Locale.Auth.Tips}</div>
+      <div className={styles['auth-title']}>{Locale.Auth.Title}</div>
+      <div className={styles['auth-tips']}>{Locale.Auth.Tips}</div>
 
       <input
-        className={styles["auth-input"]}
+        className={styles['auth-input']}
         type="password"
         placeholder={Locale.Auth.Input}
         value={access.accessCode}
@@ -42,12 +42,8 @@ export function AuthPage() {
         }}
       />
 
-      <div className={styles["auth-actions"]}>
-        <IconButton
-          text={Locale.Auth.Confirm}
-          type="primary"
-          onClick={goHome}
-        />
+      <div className={styles['auth-actions']}>
+        <IconButton text={Locale.Auth.Confirm} type="primary" onClick={goHome} />
         <IconButton text={Locale.Auth.Later} onClick={goHome} />
       </div>
     </div>

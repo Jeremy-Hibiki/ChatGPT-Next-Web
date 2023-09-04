@@ -1,4 +1,4 @@
-import md5 from "spark-md5";
+import md5 from 'spark-md5';
 
 declare global {
   namespace NodeJS {
@@ -10,7 +10,7 @@ declare global {
       VERCEL?: string;
       HIDE_USER_API_KEY?: string; // disable user's api key input
       DISABLE_GPT4?: string; // allow user to use gpt-4 or not
-      BUILD_MODE?: "standalone" | "export";
+      BUILD_MODE?: 'standalone' | 'export';
       BUILD_APP?: string; // is building desktop app
       HIDE_BALANCE_QUERY?: string; // allow user to query balance or not
     }
@@ -21,9 +21,7 @@ const ACCESS_CODES = (function getAccessCodes(): Set<string> {
   const code = process.env.CODE;
 
   try {
-    const codes = (code?.split(",") ?? [])
-      .filter((v) => !!v)
-      .map((v) => md5.hash(v.trim()));
+    const codes = (code?.split(',') ?? []).filter((v) => !!v).map((v) => md5.hash(v.trim()));
     return new Set(codes);
   } catch (e) {
     return new Set();
@@ -31,10 +29,8 @@ const ACCESS_CODES = (function getAccessCodes(): Set<string> {
 })();
 
 export const getServerSideConfig = () => {
-  if (typeof process === "undefined") {
-    throw Error(
-      "[Server Config] you are importing a nodejs-only module outside of nodejs",
-    );
+  if (typeof process === 'undefined') {
+    throw Error('[Server Config] you are importing a nodejs-only module outside of nodejs');
   }
 
   return {

@@ -1,23 +1,23 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-import { trimTopic } from "../utils";
+import { trimTopic } from '../utils';
 
-import Locale, { getLang } from "../locales";
-import { showToast } from "../components/ui-lib";
-import { ModelConfig, ModelType, useAppConfig } from "./config";
-import { createEmptyMask, Mask } from "./mask";
+import { nanoid } from 'nanoid';
+import { api, RequestMessage } from '../client/api';
+import { ChatControllerPool } from '../client/controller';
+import { showToast } from '../components/ui-lib';
 import {
   DEFAULT_INPUT_TEMPLATE,
   DEFAULT_SYSTEM_TEMPLATE,
   StoreKey,
   SUMMARIZE_MODEL,
-} from "../constant";
-import { api, RequestMessage } from "../client/api";
-import { ChatControllerPool } from "../client/controller";
-import { prettyObject } from "../utils/format";
-import { estimateTokenLength } from "../utils/token";
-import { nanoid } from "nanoid";
+} from '../constant';
+import Locale, { getLang } from '../locales';
+import { prettyObject } from '../utils/format';
+import { estimateTokenLength } from '../utils/token';
+import { ModelConfig, ModelType, useAppConfig } from './config';
+import { createEmptyMask, Mask } from './mask';
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -31,8 +31,8 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
   return {
     id: nanoid(),
     date: new Date().toLocaleString(),
-    role: "user",
-    content: "",
+    role: 'user',
+    content: '',
     ...override,
   };
 }
@@ -59,7 +59,7 @@ export interface ChatSession {
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
 export const BOT_HELLO: ChatMessage = createMessage({
-  role: "assistant",
+  role: 'assistant',
   content: Locale.Store.BotHello,
 });
 
@@ -67,7 +67,7 @@ function createEmptySession(): ChatSession {
   return {
     id: nanoid(),
     topic: DEFAULT_TOPIC,
-    memoryPrompt: "",
+    memoryPrompt: '',
     messages: [],
     stat: {
       tokenCount: 0,
@@ -83,7 +83,7 @@ function createEmptySession(): ChatSession {
 
 function getSummarizeModel(currentModel: string) {
   // if it is using gpt-* models, force to use 3.5 to summarize
-  return currentModel.startsWith("gpt") ? SUMMARIZE_MODEL : currentModel;
+  return currentModel.startsWith('gpt') ? SUMMARIZE_MODEL : currentModel;
 }
 
 interface ChatStore {
@@ -128,9 +128,9 @@ function fillTemplateWith(input: string, modelConfig: ModelConfig) {
   let output = modelConfig.template ?? DEFAULT_INPUT_TEMPLATE;
 
   // must contains {{input}}
-  const inputVar = "{{input}}";
+  const inputVar = '{{input}}';
   if (!output.includes(inputVar)) {
-    output += "\n" + inputVar;
+    output += '\n' + inputVar;
   }
 
   Object.entries(vars).forEach(([name, value]) => {
@@ -224,10 +224,7 @@ export const useChatStore = create<ChatStore>()(
         sessions.splice(index, 1);
 
         const currentIndex = get().currentSessionIndex;
-        let nextIndex = Math.min(
-          currentIndex - Number(index < currentIndex),
-          sessions.length - 1,
-        );
+        let nextIndex = Math.min(currentIndex - Number(index < currentIndex), sessions.length - 1);
 
         if (deletingLastSession) {
           nextIndex = 0;
@@ -285,15 +282,15 @@ export const useChatStore = create<ChatStore>()(
         const modelConfig = session.mask.modelConfig;
 
         const userContent = fillTemplateWith(content, modelConfig);
-        console.log("[User Input] after template: ", userContent);
+        console.log('[User Input] after template: ', userContent);
 
         const userMessage: ChatMessage = createMessage({
-          role: "user",
+          role: 'user',
           content: userContent,
         });
 
         const botMessage: ChatMessage = createMessage({
-          role: "assistant",
+          role: 'assistant',
           streaming: true,
           model: modelConfig.model,
         });
@@ -309,10 +306,7 @@ export const useChatStore = create<ChatStore>()(
             ...userMessage,
             content,
           };
-          session.messages = session.messages.concat([
-            savedUserMessage,
-            botMessage,
-          ]);
+          session.messages = session.messages.concat([savedUserMessage, botMessage]);
         });
 
         // make request
@@ -337,9 +331,9 @@ export const useChatStore = create<ChatStore>()(
             ChatControllerPool.remove(session.id, botMessage.id);
           },
           onError(error) {
-            const isAborted = error.message.includes("aborted");
+            const isAborted = error.message.includes('aborted');
             botMessage.content +=
-              "\n\n" +
+              '\n\n' +
               prettyObject({
                 error: true,
                 message: error.message,
@@ -350,20 +344,13 @@ export const useChatStore = create<ChatStore>()(
             get().updateCurrentSession((session) => {
               session.messages = session.messages.concat();
             });
-            ChatControllerPool.remove(
-              session.id,
-              botMessage.id ?? messageIndex,
-            );
+            ChatControllerPool.remove(session.id, botMessage.id ?? messageIndex);
 
-            console.error("[Chat] failed ", error);
+            console.error('[Chat] failed ', error);
           },
           onController(controller) {
             // collect controller for stop/retry
-            ChatControllerPool.addController(
-              session.id,
-              botMessage.id ?? messageIndex,
-              controller,
-            );
+            ChatControllerPool.addController(session.id, botMessage.id ?? messageIndex, controller);
           },
         });
       },
@@ -372,12 +359,12 @@ export const useChatStore = create<ChatStore>()(
         const session = get().currentSession();
 
         return {
-          role: "system",
+          role: 'system',
           content:
             session.memoryPrompt.length > 0
               ? Locale.Store.Prompt.History(session.memoryPrompt)
-              : "",
-          date: "",
+              : '',
+          date: '',
         } as ChatMessage;
       },
 
@@ -396,8 +383,8 @@ export const useChatStore = create<ChatStore>()(
         const systemPrompts = shouldInjectSystemPrompts
           ? [
               createMessage({
-                role: "system",
-                content: fillTemplateWith("", {
+                role: 'system',
+                content: fillTemplateWith('', {
                   ...modelConfig,
                   template: DEFAULT_SYSTEM_TEMPLATE,
                 }),
@@ -405,10 +392,7 @@ export const useChatStore = create<ChatStore>()(
             ]
           : [];
         if (shouldInjectSystemPrompts) {
-          console.log(
-            "[Global System Prompt] ",
-            systemPrompts.at(0)?.content ?? "empty",
-          );
+          console.log('[Global System Prompt] ', systemPrompts.at(0)?.content ?? 'empty');
         }
 
         // long term memory
@@ -417,9 +401,7 @@ export const useChatStore = create<ChatStore>()(
           session.memoryPrompt &&
           session.memoryPrompt.length > 0 &&
           session.lastSummarizeIndex > clearContextIndex;
-        const longTermMemoryPrompts = shouldSendLongTermMemory
-          ? [get().getMemoryPrompt()]
-          : [];
+        const longTermMemoryPrompts = shouldSendLongTermMemory ? [get().getMemoryPrompt()] : [];
         const longTermMemoryStartIndex = session.lastSummarizeIndex;
 
         // short term memory
@@ -480,7 +462,7 @@ export const useChatStore = create<ChatStore>()(
       resetSession() {
         get().updateCurrentSession((session) => {
           session.messages = [];
-          session.memoryPrompt = "";
+          session.memoryPrompt = '';
         });
       },
 
@@ -500,7 +482,7 @@ export const useChatStore = create<ChatStore>()(
         ) {
           const topicMessages = messages.concat(
             createMessage({
-              role: "user",
+              role: 'user',
               content: Locale.Store.Prompt.Topic,
             }),
           );
@@ -512,21 +494,15 @@ export const useChatStore = create<ChatStore>()(
             onFinish(message) {
               get().updateCurrentSession(
                 (session) =>
-                  (session.topic =
-                    message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
+                  (session.topic = message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
               );
             },
           });
         }
 
         const modelConfig = session.mask.modelConfig;
-        const summarizeIndex = Math.max(
-          session.lastSummarizeIndex,
-          session.clearContextIndex ?? 0,
-        );
-        let toBeSummarizedMsgs = messages
-          .filter((msg) => !msg.isError)
-          .slice(summarizeIndex);
+        const summarizeIndex = Math.max(session.lastSummarizeIndex, session.clearContextIndex ?? 0);
+        let toBeSummarizedMsgs = messages.filter((msg) => !msg.isError).slice(summarizeIndex);
 
         const historyMsgLength = countMessages(toBeSummarizedMsgs);
 
@@ -543,7 +519,7 @@ export const useChatStore = create<ChatStore>()(
         const lastSummarizeIndex = session.messages.length;
 
         console.log(
-          "[Chat History] ",
+          '[Chat History] ',
           toBeSummarizedMsgs,
           historyMsgLength,
           modelConfig.compressMessageLengthThreshold,
@@ -556,9 +532,9 @@ export const useChatStore = create<ChatStore>()(
           api.llm.chat({
             messages: toBeSummarizedMsgs.concat(
               createMessage({
-                role: "system",
+                role: 'system',
                 content: Locale.Store.Prompt.Summarize,
-                date: "",
+                date: '',
               }),
             ),
             config: {
@@ -570,11 +546,11 @@ export const useChatStore = create<ChatStore>()(
               session.memoryPrompt = message;
             },
             onFinish(message) {
-              console.log("[Memory] ", message);
+              console.log('[Memory] ', message);
               session.lastSummarizeIndex = lastSummarizeIndex;
             },
             onError(err) {
-              console.error("[Summarize] ", err);
+              console.error('[Summarize] ', err);
             },
           });
         }
@@ -635,7 +611,7 @@ export const useChatStore = create<ChatStore>()(
           newState.sessions.forEach((s) => {
             if (
               // Exclude those already set by user
-              !s.mask.modelConfig.hasOwnProperty("enableInjectSystemPrompts")
+              !s.mask.modelConfig.hasOwnProperty('enableInjectSystemPrompts')
             ) {
               // Because users may have changed this configuration,
               // the user's current configuration is used instead of the default

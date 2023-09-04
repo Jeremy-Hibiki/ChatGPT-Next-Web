@@ -1,18 +1,18 @@
-import ReactMarkdown from "react-markdown";
-import "katex/dist/katex.min.css";
-import RemarkMath from "remark-math";
-import RemarkBreaks from "remark-breaks";
-import RehypeKatex from "rehype-katex";
-import RemarkGfm from "remark-gfm";
-import RehypeHighlight from "rehype-highlight";
-import { useRef, useState, RefObject, useEffect } from "react";
-import { copyToClipboard } from "../utils";
-import mermaid from "mermaid";
+import 'katex/dist/katex.min.css';
+import mermaid from 'mermaid';
+import { RefObject, useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import RehypeHighlight from 'rehype-highlight';
+import RehypeKatex from 'rehype-katex';
+import RemarkBreaks from 'remark-breaks';
+import RemarkGfm from 'remark-gfm';
+import RemarkMath from 'remark-math';
+import { copyToClipboard } from '../utils';
 
-import LoadingIcon from "../icons/three-dots.svg";
-import React from "react";
-import { useDebouncedCallback, useThrottledCallback } from "use-debounce";
-import { showImageModal } from "./ui-lib";
+import React from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import LoadingIcon from '../icons/three-dots.svg';
+import { showImageModal } from './ui-lib';
 
 export function Mermaid(props: { code: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -27,17 +27,17 @@ export function Mermaid(props: { code: string }) {
         })
         .catch((e) => {
           setHasError(true);
-          console.error("[Mermaid] ", e.message);
+          console.error('[Mermaid] ', e.message);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.code]);
 
   function viewSvgInNewWindow() {
-    const svg = ref.current?.querySelector("svg");
+    const svg = ref.current?.querySelector('svg');
     if (!svg) return;
     const text = new XMLSerializer().serializeToString(svg);
-    const blob = new Blob([text], { type: "image/svg+xml" });
+    const blob = new Blob([text], { type: 'image/svg+xml' });
     showImageModal(URL.createObjectURL(blob));
   }
 
@@ -49,8 +49,8 @@ export function Mermaid(props: { code: string }) {
     <div
       className="no-dark mermaid"
       style={{
-        cursor: "pointer",
-        overflow: "auto",
+        cursor: 'pointer',
+        overflow: 'auto',
       }}
       ref={ref}
       onClick={() => viewSvgInNewWindow()}
@@ -63,11 +63,11 @@ export function Mermaid(props: { code: string }) {
 export function PreCode(props: { children: any }) {
   const ref = useRef<HTMLPreElement>(null);
   const refText = ref.current?.innerText;
-  const [mermaidCode, setMermaidCode] = useState("");
+  const [mermaidCode, setMermaidCode] = useState('');
 
   const renderMermaid = useDebouncedCallback(() => {
     if (!ref.current) return;
-    const mermaidDom = ref.current.querySelector("code.language-mermaid");
+    const mermaidDom = ref.current.querySelector('code.language-mermaid');
     if (mermaidDom) {
       setMermaidCode((mermaidDom as HTMLElement).innerText);
     }
@@ -80,9 +80,7 @@ export function PreCode(props: { children: any }) {
 
   return (
     <>
-      {mermaidCode.length > 0 && (
-        <Mermaid code={mermaidCode} key={mermaidCode} />
-      )}
+      {mermaidCode.length > 0 && <Mermaid code={mermaidCode} key={mermaidCode} />}
       <pre ref={ref}>
         <span
           className="copy-code-button"
@@ -117,9 +115,9 @@ function _MarkDownContent(props: { content: string }) {
         pre: PreCode,
         p: (pProps) => <p {...pProps} dir="auto" />,
         a: (aProps) => {
-          const href = aProps.href || "";
+          const href = aProps.href || '';
           const isInternal = /^\/#/i.test(href);
-          const target = isInternal ? "_self" : aProps.target ?? "_blank";
+          const target = isInternal ? '_self' : aProps.target ?? '_blank';
           return <a {...aProps} target={target} />;
         },
       }}
@@ -152,11 +150,7 @@ export function Markdown(
       onContextMenu={props.onContextMenu}
       onDoubleClickCapture={props.onDoubleClickCapture}
     >
-      {props.loading ? (
-        <LoadingIcon />
-      ) : (
-        <MarkdownContent content={props.content} />
-      )}
+      {props.loading ? <LoadingIcon /> : <MarkdownContent content={props.content} />}
     </div>
   );
 }

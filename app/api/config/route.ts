@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import { getServerSideConfig } from "../../config/server";
+import { getServerSideConfig } from '../../config/server';
 
 const serverConfig = getServerSideConfig();
 
@@ -24,4 +24,4 @@ async function handle() {
 export const GET = handle;
 export const POST = handle;
 
-export const runtime = "edge";
+export const runtime = 'edge';

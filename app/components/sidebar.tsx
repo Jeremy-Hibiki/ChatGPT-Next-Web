@@ -1,20 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import styles from "./home.module.scss";
+import styles from './home.module.scss';
 
-import { IconButton } from "./button";
-import SettingsIcon from "../icons/settings.svg";
-import GithubIcon from "../icons/github.svg";
-import ChatGptIcon from "../icons/chatgpt.svg";
-import AddIcon from "../icons/add.svg";
-import CloseIcon from "../icons/close.svg";
-import MaskIcon from "../icons/mask.svg";
-import PluginIcon from "../icons/plugin.svg";
-import DragIcon from "../icons/drag.svg";
+import AddIcon from '../icons/add.svg';
+import ChatGptIcon from '../icons/chatgpt.svg';
+import CloseIcon from '../icons/close.svg';
+import DragIcon from '../icons/drag.svg';
+import GithubIcon from '../icons/github.svg';
+import MaskIcon from '../icons/mask.svg';
+import PluginIcon from '../icons/plugin.svg';
+import SettingsIcon from '../icons/settings.svg';
+import { IconButton } from './button';
 
-import Locale from "../locales";
+import Locale from '../locales';
 
-import { useAppConfig, useChatStore } from "../store";
+import { useAppConfig, useChatStore } from '../store';
 
 import {
   MAX_SIDEBAR_WIDTH,
@@ -22,14 +22,14 @@ import {
   NARROW_SIDEBAR_WIDTH,
   Path,
   REPO_URL,
-} from "../constant";
+} from '../constant';
 
-import { Link, useNavigate } from "react-router-dom";
-import { useMobileScreen } from "../utils";
-import dynamic from "next/dynamic";
-import { showConfirm, showToast } from "./ui-lib";
+import dynamic from 'next/dynamic';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMobileScreen } from '../utils';
+import { showConfirm, showToast } from './ui-lib';
 
-const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
+const ChatList = dynamic(async () => (await import('./chat-list')).ChatList, {
   loading: () => null,
 });
 
@@ -39,16 +39,16 @@ function useHotKey() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.altKey || e.ctrlKey) {
-        if (e.key === "ArrowUp") {
+        if (e.key === 'ArrowUp') {
           chatStore.nextSession(-1);
-        } else if (e.key === "ArrowDown") {
+        } else if (e.key === 'ArrowDown') {
           chatStore.nextSession(1);
         }
       }
     };
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
   });
 }
 
@@ -72,26 +72,23 @@ function useDragSideBar() {
 
   const handleMouseUp = useRef(() => {
     startDragWidth.current = config.sidebarWidth ?? 300;
-    window.removeEventListener("mousemove", handleMouseMove.current);
-    window.removeEventListener("mouseup", handleMouseUp.current);
+    window.removeEventListener('mousemove', handleMouseMove.current);
+    window.removeEventListener('mouseup', handleMouseUp.current);
   });
 
   const onDragMouseDown = (e: MouseEvent) => {
     startX.current = e.clientX;
 
-    window.addEventListener("mousemove", handleMouseMove.current);
-    window.addEventListener("mouseup", handleMouseUp.current);
+    window.addEventListener('mousemove', handleMouseMove.current);
+    window.addEventListener('mouseup', handleMouseUp.current);
   };
   const isMobileScreen = useMobileScreen();
-  const shouldNarrow =
-    !isMobileScreen && config.sidebarWidth < MIN_SIDEBAR_WIDTH;
+  const shouldNarrow = !isMobileScreen && config.sidebarWidth < MIN_SIDEBAR_WIDTH;
 
   useEffect(() => {
-    const barWidth = shouldNarrow
-      ? NARROW_SIDEBAR_WIDTH
-      : limit(config.sidebarWidth ?? 300);
-    const sideBarWidth = isMobileScreen ? "100vw" : `${barWidth}px`;
-    document.documentElement.style.setProperty("--sidebar-width", sideBarWidth);
+    const barWidth = shouldNarrow ? NARROW_SIDEBAR_WIDTH : limit(config.sidebarWidth ?? 300);
+    const sideBarWidth = isMobileScreen ? '100vw' : `${barWidth}px`;
+    document.documentElement.style.setProperty('--sidebar-width', sideBarWidth);
   }, [config.sidebarWidth, isMobileScreen, shouldNarrow]);
 
   return {
@@ -112,41 +109,37 @@ export function SideBar(props: { className?: string }) {
 
   return (
     <div
-      className={`${styles.sidebar} ${props.className} ${
-        shouldNarrow && styles["narrow-sidebar"]
-      }`}
+      className={`${styles.sidebar} ${props.className} ${shouldNarrow && styles['narrow-sidebar']}`}
     >
-      <div className={styles["sidebar-header"]} data-tauri-drag-region>
-        <div className={styles["sidebar-title"]} data-tauri-drag-region>
+      <div className={styles['sidebar-header']} data-tauri-drag-region>
+        <div className={styles['sidebar-title']} data-tauri-drag-region>
           ChatGPT Next
         </div>
-        <div className={styles["sidebar-sub-title"]}>
-          Build your own AI assistant.
-        </div>
-        <div className={styles["sidebar-logo"] + " no-dark"}>
+        <div className={styles['sidebar-sub-title']}>Build your own AI assistant.</div>
+        <div className={styles['sidebar-logo'] + ' no-dark'}>
           <ChatGptIcon />
         </div>
       </div>
 
-      <div className={styles["sidebar-header-bar"]}>
+      <div className={styles['sidebar-header-bar']}>
         <IconButton
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.Mask.Name}
-          className={styles["sidebar-bar-button"]}
+          className={styles['sidebar-bar-button']}
           onClick={() => navigate(Path.NewChat, { state: { fromHome: true } })}
           shadow
         />
         <IconButton
           icon={<PluginIcon />}
           text={shouldNarrow ? undefined : Locale.Plugin.Name}
-          className={styles["sidebar-bar-button"]}
+          className={styles['sidebar-bar-button']}
           onClick={() => showToast(Locale.WIP)}
           shadow
         />
       </div>
 
       <div
-        className={styles["sidebar-body"]}
+        className={styles['sidebar-body']}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             navigate(Path.Home);
@@ -156,9 +149,9 @@ export function SideBar(props: { className?: string }) {
         <ChatList narrow={shouldNarrow} />
       </div>
 
-      <div className={styles["sidebar-tail"]}>
-        <div className={styles["sidebar-actions"]}>
-          <div className={styles["sidebar-action"] + " " + styles.mobile}>
+      <div className={styles['sidebar-tail']}>
+        <div className={styles['sidebar-actions']}>
+          <div className={styles['sidebar-action'] + ' ' + styles.mobile}>
             <IconButton
               icon={<CloseIcon />}
               onClick={async () => {
@@ -168,12 +161,12 @@ export function SideBar(props: { className?: string }) {
               }}
             />
           </div>
-          <div className={styles["sidebar-action"]}>
+          <div className={styles['sidebar-action']}>
             <Link to={Path.Settings}>
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          <div className={styles["sidebar-action"]}>
+          <div className={styles['sidebar-action']}>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
               <IconButton icon={<GithubIcon />} shadow />
             </a>
@@ -196,10 +189,7 @@ export function SideBar(props: { className?: string }) {
         </div>
       </div>
 
-      <div
-        className={styles["sidebar-drag"]}
-        onMouseDown={(e) => onDragMouseDown(e as any)}
-      >
+      <div className={styles['sidebar-drag']} onMouseDown={(e) => onDragMouseDown(e as any)}>
         <DragIcon />
       </div>
     </div>

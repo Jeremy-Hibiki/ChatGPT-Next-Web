@@ -3,17 +3,20 @@
   "private": false,
   "license": "mit",
   "scripts": {
-    "dev": "next dev",
+    "app:build": "yarn tauri build",
+    "app:dev": "yarn tauri dev",
     "build": "cross-env BUILD_MODE=standalone next build",
-    "start": "next start",
-    "lint": "next lint",
+    "dev": "next dev",
     "export": "cross-env BUILD_MODE=export BUILD_APP=1 next build",
     "export:dev": "cross-env BUILD_MODE=export BUILD_APP=1 next dev",
-    "app:dev": "yarn tauri dev",
-    "app:build": "yarn tauri build",
-    "prompts": "node ./scripts/fetch-prompts.mjs",
+    "lint": "next lint",
     "prepare": "husky install",
-    "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
+    "prompts": "node ./scripts/fetch-prompts.mjs",
+    "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev",
+    "start": "next start"
+  },
+  "resolutions": {
+    "lint-staged/yaml": "^2.2.2"
   },
   "dependencies": {
     "@fortaine/fetch-event-source": "^3.0.6",
@@ -51,15 +54,14 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.44.0",
     "eslint-config-next": "13.4.19",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.2.2",
     "prettier": "^3.0.2",
+    "prettier-plugin-organize-imports": "^3.2.3",
+    "prettier-plugin-packagejson": "^2.4.5",
     "typescript": "4.9.5",
     "webpack": "^5.88.1"
-  },
-  "resolutions": {
-    "lint-staged/yaml": "^2.2.2"
   }
 }

@@ -1,8 +1,8 @@
-import { ModalConfigValidator, ModelConfig, useAppConfig } from "../store";
+import { ModalConfigValidator, ModelConfig, useAppConfig } from '../store';
 
-import Locale from "../locales";
-import { InputRange } from "./input-range";
-import { ListItem, Select } from "./ui-lib";
+import Locale from '../locales';
+import { InputRange } from './input-range';
+import { ListItem, Select } from './ui-lib';
 
 export function ModelConfigList(props: {
   modelConfig: ModelConfig;
@@ -17,10 +17,7 @@ export function ModelConfigList(props: {
           value={props.modelConfig.model}
           onChange={(e) => {
             props.updateConfig(
-              (config) =>
-                (config.model = ModalConfigValidator.model(
-                  e.currentTarget.value,
-                )),
+              (config) => (config.model = ModalConfigValidator.model(e.currentTarget.value)),
             );
           }}
         >
@@ -50,10 +47,7 @@ export function ModelConfigList(props: {
           }}
         ></InputRange>
       </ListItem>
-      <ListItem
-        title={Locale.Settings.TopP.Title}
-        subTitle={Locale.Settings.TopP.SubTitle}
-      >
+      <ListItem title={Locale.Settings.TopP.Title} subTitle={Locale.Settings.TopP.SubTitle}>
         <InputRange
           value={(props.modelConfig.top_p ?? 1).toFixed(1)}
           min="0"
@@ -62,9 +56,7 @@ export function ModelConfigList(props: {
           onChange={(e) => {
             props.updateConfig(
               (config) =>
-                (config.top_p = ModalConfigValidator.top_p(
-                  e.currentTarget.valueAsNumber,
-                )),
+                (config.top_p = ModalConfigValidator.top_p(e.currentTarget.valueAsNumber)),
             );
           }}
         ></InputRange>
@@ -100,10 +92,9 @@ export function ModelConfigList(props: {
           onChange={(e) => {
             props.updateConfig(
               (config) =>
-                (config.presence_penalty =
-                  ModalConfigValidator.presence_penalty(
-                    e.currentTarget.valueAsNumber,
-                  )),
+                (config.presence_penalty = ModalConfigValidator.presence_penalty(
+                  e.currentTarget.valueAsNumber,
+                )),
             );
           }}
         ></InputRange>
@@ -121,10 +112,9 @@ export function ModelConfigList(props: {
           onChange={(e) => {
             props.updateConfig(
               (config) =>
-                (config.frequency_penalty =
-                  ModalConfigValidator.frequency_penalty(
-                    e.currentTarget.valueAsNumber,
-                  )),
+                (config.frequency_penalty = ModalConfigValidator.frequency_penalty(
+                  e.currentTarget.valueAsNumber,
+                )),
             );
           }}
         ></InputRange>
@@ -139,8 +129,7 @@ export function ModelConfigList(props: {
           checked={props.modelConfig.enableInjectSystemPrompts}
           onChange={(e) =>
             props.updateConfig(
-              (config) =>
-                (config.enableInjectSystemPrompts = e.currentTarget.checked),
+              (config) => (config.enableInjectSystemPrompts = e.currentTarget.checked),
             )
           }
         ></input>
@@ -154,9 +143,7 @@ export function ModelConfigList(props: {
           type="text"
           value={props.modelConfig.template}
           onChange={(e) =>
-            props.updateConfig(
-              (config) => (config.template = e.currentTarget.value),
-            )
+            props.updateConfig((config) => (config.template = e.currentTarget.value))
           }
         ></input>
       </ListItem>
@@ -172,9 +159,7 @@ export function ModelConfigList(props: {
           max="64"
           step="1"
           onChange={(e) =>
-            props.updateConfig(
-              (config) => (config.historyMessageCount = e.target.valueAsNumber),
-            )
+            props.updateConfig((config) => (config.historyMessageCount = e.target.valueAsNumber))
           }
         ></InputRange>
       </ListItem>
@@ -190,9 +175,7 @@ export function ModelConfigList(props: {
           value={props.modelConfig.compressMessageLengthThreshold}
           onChange={(e) =>
             props.updateConfig(
-              (config) =>
-                (config.compressMessageLengthThreshold =
-                  e.currentTarget.valueAsNumber),
+              (config) => (config.compressMessageLengthThreshold = e.currentTarget.valueAsNumber),
             )
           }
         ></input>
@@ -202,9 +185,7 @@ export function ModelConfigList(props: {
           type="checkbox"
           checked={props.modelConfig.sendMemory}
           onChange={(e) =>
-            props.updateConfig(
-              (config) => (config.sendMemory = e.currentTarget.checked),
-            )
+            props.updateConfig((config) => (config.sendMemory = e.currentTarget.checked))
           }
         ></input>
       </ListItem>

@@ -1,5 +1,5 @@
-@import "./animation.scss";
-@import "./window.scss";
+@import './animation.scss';
+@import './window.scss';
 
 @mixin light {
   --theme: light;
@@ -89,8 +89,8 @@
 html {
   height: var(--full-height);
 
-  font-family: "Noto Sans", "SF Pro SC", "SF Pro Text", "SF Pro Icons",
-    "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-family: 'Noto Sans', 'SF Pro SC', 'SF Pro Text', 'SF Pro Icons', 'PingFang SC',
+    'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
 body {
@@ -149,7 +149,7 @@ input {
   font-family: inherit;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   cursor: pointer;
   background-color: var(--white);
   color: var(--black);
@@ -163,16 +163,16 @@ input[type="checkbox"] {
   justify-content: center;
 }
 
-input[type="checkbox"]:checked::after {
+input[type='checkbox']:checked::after {
   display: inline-block;
   width: 8px;
   height: 8px;
   background-color: var(--primary);
-  content: " ";
+  content: ' ';
   border-radius: 2px;
 }
 
-input[type="range"] {
+input[type='range'] {
   appearance: none;
   background-color: var(--white);
   color: var(--black);
@@ -190,15 +190,15 @@ input[type="range"] {
   border: none;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
   @include thumb();
 }
 
-input[type="range"]::-moz-range-thumb {
+input[type='range']::-moz-range-thumb {
   @include thumb();
 }
 
-input[type="range"]::-ms-thumb {
+input[type='range']::-ms-thumb {
   @include thumb();
 }
 
@@ -207,21 +207,21 @@ input[type="range"]::-ms-thumb {
   width: 24px;
 }
 
-input[type="range"]::-webkit-slider-thumb:hover {
+input[type='range']::-webkit-slider-thumb:hover {
   @include thumbHover();
 }
 
-input[type="range"]::-moz-range-thumb:hover {
+input[type='range']::-moz-range-thumb:hover {
   @include thumbHover();
 }
 
-input[type="range"]::-ms-thumb:hover {
+input[type='range']::-ms-thumb:hover {
   @include thumbHover();
 }
 
-input[type="number"],
-input[type="text"],
-input[type="password"] {
+input[type='number'],
+input[type='text'],
+input[type='password'] {
   appearance: none;
   border-radius: 10px;
   border: var(--border-in-light);
@@ -290,7 +290,7 @@ pre {
     transition: all ease 0.3s;
 
     &:after {
-      content: "copy";
+      content: 'copy';
     }
 
     &:hover {

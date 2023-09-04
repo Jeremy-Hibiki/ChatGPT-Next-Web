@@ -1,11 +1,11 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { FETCH_COMMIT_URL, FETCH_TAG_URL, StoreKey } from "../constant";
-import { api } from "../client/api";
-import { getClientConfig } from "../config/client";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { api } from '../client/api';
+import { getClientConfig } from '../config/client';
+import { FETCH_COMMIT_URL, FETCH_TAG_URL, StoreKey } from '../constant';
 
 export interface UpdateStore {
-  versionType: "date" | "tag";
+  versionType: 'date' | 'tag';
   lastUpdate: number;
   version: string;
   remoteVersion: string;
@@ -28,15 +28,13 @@ function formatVersionDate(t: string) {
   const month = d.getUTCMonth() + 1;
   const day = d.getUTCDate();
 
-  return [
-    year.toString(),
-    month.toString().padStart(2, "0"),
-    day.toString().padStart(2, "0"),
-  ].join("");
+  return [year.toString(), month.toString().padStart(2, '0'), day.toString().padStart(2, '0')].join(
+    '',
+  );
 }
 
-async function getVersion(type: "date" | "tag") {
-  if (type === "date") {
+async function getVersion(type: 'date' | 'tag') {
+  if (type === 'date') {
     const data = (await (await fetch(FETCH_COMMIT_URL)).json()) as {
       commit: {
         author: { name: string; date: string };
@@ -46,7 +44,7 @@ async function getVersion(type: "date" | "tag") {
     const remoteCommitTime = data[0].commit.author.date;
     const remoteId = new Date(remoteCommitTime).getTime().toString();
     return remoteId;
-  } else if (type === "tag") {
+  } else if (type === 'tag') {
     const data = (await (await fetch(FETCH_TAG_URL)).json()) as {
       commit: { sha: string; url: string };
       name: string;
@@ -58,15 +56,15 @@ async function getVersion(type: "date" | "tag") {
 export const useUpdateStore = create<UpdateStore>()(
   persist(
     (set, get) => ({
-      versionType: "tag",
+      versionType: 'tag',
       lastUpdate: 0,
-      version: "unknown",
-      remoteVersion: "",
+      version: 'unknown',
+      remoteVersion: '',
 
       lastUpdateUsage: 0,
 
       formatVersion(version: string) {
-        if (get().versionType === "date") {
+        if (get().versionType === 'date') {
           version = formatVersionDate(version);
         }
         return version;
@@ -75,9 +73,7 @@ export const useUpdateStore = create<UpdateStore>()(
       async getLatestVersion(force = false) {
         const versionType = get().versionType;
         let version =
-          versionType === "date"
-            ? getClientConfig()?.commitDate
-            : getClientConfig()?.version;
+          versionType === 'date' ? getClientConfig()?.commitDate : getClientConfig()?.version;
 
         set(() => ({ version }));
 
@@ -93,9 +89,9 @@ export const useUpdateStore = create<UpdateStore>()(
           set(() => ({
             remoteVersion: remoteId,
           }));
-          console.log("[Got Upstream] ", remoteId);
+          console.log('[Got Upstream] ', remoteId);
         } catch (error) {
-          console.error("[Fetch Upstream Commit Id]", error);
+          console.error('[Fetch Upstream Commit Id]', error);
         }
       },
 
