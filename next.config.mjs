@@ -1,3 +1,4 @@
+import NextBundleAnalyzer from '@next/bundle-analyzer';
 import webpack from 'webpack';
 
 const disableChunk = !!process.env.DISABLE_CHUNK;
@@ -77,4 +78,8 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const withBundleAnalyzer = NextBundleAnalyzer({
+  enabled: !!process.env.ANALYZE,
+});
+
+export default withBundleAnalyzer(nextConfig);
