@@ -1,9 +1,9 @@
 import EmojiPicker, { Emoji, EmojiStyle, Theme as EmojiTheme } from 'emoji-picker-react';
 
-import { ModelType } from '../store';
-
 import BlackBotIcon from '../icons/black-bot.svg';
 import BotIcon from '../icons/bot.svg';
+
+import { ModelType } from '../store';
 
 export function getEmojiUrl(unified: string, style: EmojiStyle) {
   return `https://cdn.staticfile.org/emoji-datasource-apple/14.0.0/img/${style}/64/${unified}.png`;

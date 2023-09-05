@@ -1,6 +1,8 @@
 import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
+import AutoIcon from '../icons/auto.svg';
+import BottomIcon from '../icons/bottom.svg';
 import BrainIcon from '../icons/brain.svg';
 import BreakIcon from '../icons/break.svg';
 import CancelIcon from '../icons/cancel.svg';
@@ -8,24 +10,21 @@ import SettingsIcon from '../icons/chat-settings.svg';
 import DeleteIcon from '../icons/clear.svg';
 import ConfirmIcon from '../icons/confirm.svg';
 import CopyIcon from '../icons/copy.svg';
+import DarkIcon from '../icons/dark.svg';
+import LightIcon from '../icons/light.svg';
 import MaskIcon from '../icons/mask.svg';
 import MaxIcon from '../icons/max.svg';
 import MinIcon from '../icons/min.svg';
+import StopIcon from '../icons/pause.svg';
 import PinIcon from '../icons/pin.svg';
 import PromptIcon from '../icons/prompt.svg';
 import ResetIcon from '../icons/reload.svg';
 import { default as EditIcon, default as RenameIcon } from '../icons/rename.svg';
 import ReturnIcon from '../icons/return.svg';
+import RobotIcon from '../icons/robot.svg';
 import SendWhiteIcon from '../icons/send-white.svg';
 import ExportIcon from '../icons/share.svg';
 import LoadingIcon from '../icons/three-dots.svg';
-
-import AutoIcon from '../icons/auto.svg';
-import BottomIcon from '../icons/bottom.svg';
-import DarkIcon from '../icons/dark.svg';
-import LightIcon from '../icons/light.svg';
-import StopIcon from '../icons/pause.svg';
-import RobotIcon from '../icons/robot.svg';
 
 import {
   BOT_HELLO,

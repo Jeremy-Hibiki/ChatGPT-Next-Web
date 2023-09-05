@@ -1,4 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import React, { HTMLProps, useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+
 import CancelIcon from '../icons/cancel.svg';
 import CloseIcon from '../icons/close.svg';
 import ConfirmIcon from '../icons/confirm.svg';
@@ -8,13 +11,11 @@ import EyeIcon from '../icons/eye.svg';
 import MaxIcon from '../icons/max.svg';
 import MinIcon from '../icons/min.svg';
 import LoadingIcon from '../icons/three-dots.svg';
-import styles from './ui-lib.module.scss';
 
 import Locale from '../locales';
-
-import React, { HTMLProps, useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import { IconButton } from './button';
+
+import styles from './ui-lib.module.scss';
 
 export function Popover(props: {
   children: JSX.Element;

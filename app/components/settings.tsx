@@ -1,6 +1,7 @@
+import { nanoid } from 'nanoid';
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-
-import styles from './settings.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '../icons/add.svg';
 import ClearIcon from '../icons/clear.svg';
@@ -10,6 +11,25 @@ import EditIcon from '../icons/edit.svg';
 import EyeIcon from '../icons/eye.svg';
 import ResetIcon from '../icons/reload.svg';
 import LoadingIcon from '../icons/three-dots.svg';
+
+import { getClientConfig } from '../config/client';
+import { Path, UPDATE_URL } from '../constant';
+import Locale, { AllLangs, ALL_LANG_OPTIONS, changeLang, getLang } from '../locales';
+import {
+  SubmitKey,
+  Theme,
+  useAccessStore,
+  useAppConfig,
+  useChatStore,
+  useUpdateStore,
+} from '../store';
+import { Prompt, SearchService, usePromptStore } from '../store/prompt';
+import { useSyncStore } from '../store/sync';
+import { copyToClipboard } from '../utils';
+import { IconButton } from './button';
+import { Avatar, AvatarPicker } from './emoji';
+import { ErrorBoundary } from './error';
+import { InputRange } from './input-range';
 import { ModelConfigList } from './model-config';
 import {
   Input,
@@ -22,28 +42,7 @@ import {
   showConfirm,
 } from './ui-lib';
 
-import {
-  SubmitKey,
-  Theme,
-  useAccessStore,
-  useAppConfig,
-  useChatStore,
-  useUpdateStore,
-} from '../store';
-import { IconButton } from './button';
-
-import { nanoid } from 'nanoid';
-import Link from 'next/link';
-import { useNavigate } from 'react-router-dom';
-import { getClientConfig } from '../config/client';
-import { Path, UPDATE_URL } from '../constant';
-import Locale, { AllLangs, ALL_LANG_OPTIONS, changeLang, getLang } from '../locales';
-import { Prompt, SearchService, usePromptStore } from '../store/prompt';
-import { useSyncStore } from '../store/sync';
-import { copyToClipboard } from '../utils';
-import { Avatar, AvatarPicker } from './emoji';
-import { ErrorBoundary } from './error';
-import { InputRange } from './input-range';
+import styles from './settings.module.scss';
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();

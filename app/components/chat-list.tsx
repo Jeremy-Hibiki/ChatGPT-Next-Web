@@ -1,17 +1,17 @@
-import DeleteIcon from '../icons/delete.svg';
-
 import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd';
-import styles from './home.module.scss';
-
-import { useChatStore } from '../store';
-
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import DeleteIcon from '../icons/delete.svg';
+
 import { Path } from '../constant';
 import Locale from '../locales';
+import { useChatStore } from '../store';
 import { Mask } from '../store/mask';
 import { MaskAvatar } from './mask';
 import { showConfirm } from './ui-lib';
+
+import styles from './home.module.scss';
 
 export function ChatItem(props: {
   onClick?: () => void;

@@ -1,9 +1,6 @@
+import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { trimTopic } from '../utils';
-
-import { nanoid } from 'nanoid';
 import { api, RequestMessage } from '../client/api';
 import { ChatControllerPool } from '../client/controller';
 import { showToast } from '../components/ui-lib';
@@ -14,6 +11,7 @@ import {
   SUMMARIZE_MODEL,
 } from '../constant';
 import Locale, { getLang } from '../locales';
+import { trimTopic } from '../utils';
 import { prettyObject } from '../utils/format';
 import { estimateTokenLength } from '../utils/token';
 import { ModelConfig, ModelType, useAppConfig } from './config';

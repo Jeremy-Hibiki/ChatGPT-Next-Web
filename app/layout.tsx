@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import { type Metadata } from 'next';
 import { getClientConfig } from './config/client';
+
 import './styles/globals.scss';
 import './styles/highlight.scss';
 import './styles/markdown.scss';

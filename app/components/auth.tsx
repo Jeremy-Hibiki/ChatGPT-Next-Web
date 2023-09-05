@@ -1,12 +1,13 @@
-import styles from './auth.module.scss';
-import { IconButton } from './button';
-
 import { useNavigate } from 'react-router-dom';
+
+import BotIcon from '../icons/bot.svg';
+
 import { Path } from '../constant';
 import Locale from '../locales';
 import { useAccessStore } from '../store';
+import { IconButton } from './button';
 
-import BotIcon from '../icons/bot.svg';
+import styles from './auth.module.scss';
 
 export function AuthPage() {
   const navigate = useNavigate();

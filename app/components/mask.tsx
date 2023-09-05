@@ -1,7 +1,6 @@
-import { IconButton } from './button';
-import { ErrorBoundary } from './error';
-
-import styles from './mask.module.scss';
+import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import AddIcon from '../icons/add.svg';
 import CloseIcon from '../icons/close.svg';
@@ -13,22 +12,22 @@ import EditIcon from '../icons/edit.svg';
 import EyeIcon from '../icons/eye.svg';
 import UploadIcon from '../icons/upload.svg';
 
-import { useNavigate } from 'react-router-dom';
 import { ROLES } from '../client/api';
+import { FileName, Path } from '../constant';
 import Locale, { AllLangs, ALL_LANG_OPTIONS, Lang } from '../locales';
+import { BUILTIN_MASK_STORE } from '../masks';
 import { ChatMessage, createMessage, ModelConfig, useAppConfig, useChatStore } from '../store';
 import { DEFAULT_MASK_AVATAR, Mask, useMaskStore } from '../store/mask';
-import { Avatar, AvatarPicker } from './emoji';
-import { Input, List, ListItem, Modal, Popover, Select, showConfirm } from './ui-lib';
-
-import { DragDropContext, Draggable, Droppable, OnDragEndResponder } from '@hello-pangea/dnd';
-import { useState } from 'react';
-import { FileName, Path } from '../constant';
-import { BUILTIN_MASK_STORE } from '../masks';
 import { Updater } from '../typing';
 import { copyToClipboard, downloadAs, readFromFile } from '../utils';
-import chatStyle from './chat.module.scss';
+import { IconButton } from './button';
+import { Avatar, AvatarPicker } from './emoji';
+import { ErrorBoundary } from './error';
 import { ModelConfigList } from './model-config';
+import { Input, List, ListItem, Modal, Popover, Select, showConfirm } from './ui-lib';
+
+import chatStyle from './chat.module.scss';
+import styles from './mask.module.scss';
 
 // drag and drop helper function
 function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {

@@ -1,29 +1,26 @@
 'use client';
 
-require('../polyfill');
+import '../polyfill';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-
-import styles from './home.module.scss';
+import { HashRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 import BotIcon from '../icons/bot.svg';
 import LoadingIcon from '../icons/three-dots.svg';
 
-import { getCSSVar, useMobileScreen } from '../utils';
-
-import dynamic from 'next/dynamic';
-import { Path, SlotID } from '../constant';
-import { ErrorBoundary } from './error';
-
-import { getISOLang, getLang } from '../locales';
-
-import { HashRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { api } from '../client/api';
 import { getClientConfig } from '../config/client';
+import { Path, SlotID } from '../constant';
+import { getISOLang, getLang } from '../locales';
 import { useAccessStore } from '../store';
 import { useAppConfig } from '../store/config';
+import { getCSSVar, useMobileScreen } from '../utils';
 import { AuthPage } from './auth';
+import { ErrorBoundary } from './error';
 import { SideBar } from './sidebar';
+
+import styles from './home.module.scss';
 
 export function Loading(props: { noLogo?: boolean }) {
   return (

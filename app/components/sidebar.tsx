@@ -1,6 +1,6 @@
+import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
-
-import styles from './home.module.scss';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AddIcon from '../icons/add.svg';
 import ChatGptIcon from '../icons/chatgpt.svg';
@@ -10,11 +10,6 @@ import GithubIcon from '../icons/github.svg';
 import MaskIcon from '../icons/mask.svg';
 import PluginIcon from '../icons/plugin.svg';
 import SettingsIcon from '../icons/settings.svg';
-import { IconButton } from './button';
-
-import Locale from '../locales';
-
-import { useAppConfig, useChatStore } from '../store';
 
 import {
   MAX_SIDEBAR_WIDTH,
@@ -23,11 +18,13 @@ import {
   Path,
   REPO_URL,
 } from '../constant';
-
-import dynamic from 'next/dynamic';
-import { Link, useNavigate } from 'react-router-dom';
+import Locale from '../locales';
+import { useAppConfig, useChatStore } from '../store';
 import { useMobileScreen } from '../utils';
+import { IconButton } from './button';
 import { showConfirm, showToast } from './ui-lib';
+
+import styles from './home.module.scss';
 
 const ChatList = dynamic(async () => (await import('./chat-list')).ChatList, {
   loading: () => null,
