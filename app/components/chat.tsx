@@ -1,4 +1,6 @@
+import dynamic from 'next/dynamic';
 import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 
 import AutoIcon from '../icons/auto.svg';
@@ -26,6 +28,16 @@ import SendWhiteIcon from '../icons/send-white.svg';
 import ExportIcon from '../icons/share.svg';
 import LoadingIcon from '../icons/three-dots.svg';
 
+import { ChatControllerPool } from '../client/controller';
+import { ChatCommandPrefix, useChatCommand, useCommand } from '../command';
+import {
+  CHAT_PAGE_SIZE,
+  LAST_INPUT_KEY,
+  Path,
+  REQUEST_TIMEOUT_MS,
+  UNFINISHED_INPUT,
+} from '../constant';
+import Locale from '../locales';
 import {
   BOT_HELLO,
   ChatMessage,
@@ -38,28 +50,17 @@ import {
   useAppConfig,
   useChatStore,
 } from '../store';
-
-import { autoGrowTextArea, copyToClipboard, selectOrCopy, useMobileScreen } from '../utils';
-
-import dynamic from 'next/dynamic';
-
-import { ChatControllerPool } from '../client/controller';
-import Locale from '../locales';
-import { Prompt, usePromptStore } from '../store/prompt';
-
-import { IconButton } from './button';
-import styles from './chat.module.scss';
-
-import { useNavigate } from 'react-router-dom';
-import { ChatCommandPrefix, useChatCommand, useCommand } from '../command';
-import { getClientConfig } from '../config/client';
-import { CHAT_PAGE_SIZE, LAST_INPUT_KEY, Path, REQUEST_TIMEOUT_MS } from '../constant';
 import { useMaskStore } from '../store/mask';
+import { Prompt, usePromptStore } from '../store/prompt';
+import { autoGrowTextArea, copyToClipboard, selectOrCopy, useMobileScreen } from '../utils';
 import { prettyObject } from '../utils/format';
+import { IconButton } from './button';
 import { Avatar } from './emoji';
 import { ExportMessageModal } from './exporter';
 import { ContextPrompts, MaskAvatar, MaskConfig } from './mask';
 import { List, ListItem, Modal, Selector, showConfirm, showPrompt, showToast } from './ui-lib';
+
+import styles from './chat.module.scss';
 
 const Markdown = dynamic(async () => (await import('./markdown')).Markdown, {
   loading: () => <LoadingIcon />,
@@ -882,8 +883,6 @@ function _Chat() {
 
   const [showPromptModal, setShowPromptModal] = useState(false);
 
-  const clientConfig = useMemo(() => getClientConfig(), []);
-
   const autoFocus = !isMobileScreen; // wont auto focus on mobile screen
   const showMaxIcon = !isMobileScreen;
 
@@ -930,6 +929,23 @@ function _Chat() {
 
   // edit / insert message modal
   const [isEditingMessage, setIsEditingMessage] = useState(false);
+
+  // remember unfinished input
+  useEffect(() => {
+    // try to load from local storage
+    const key = UNFINISHED_INPUT(session.id);
+    const mayBeUnfinishedInput = localStorage.getItem(key);
+    if (mayBeUnfinishedInput && userInput.length === 0) {
+      setUserInput(mayBeUnfinishedInput);
+      localStorage.removeItem(key);
+    }
+
+    const dom = inputRef.current;
+    return () => {
+      localStorage.setItem(key, dom?.value ?? '');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.chat} key={session.id}>
