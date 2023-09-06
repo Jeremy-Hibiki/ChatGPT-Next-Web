@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "next build",
+    "build:export": "cross-env BUILD_MODE=export next build",
     "build:analyze": "cross-env ANALYZE=1 next build",
     "dev": "next dev",
     "lint": "next lint",

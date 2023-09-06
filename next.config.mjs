@@ -1,7 +1,10 @@
 import NextBundleAnalyzer from '@next/bundle-analyzer';
 import webpack from 'webpack';
 
-const disableChunk = !!process.env.DISABLE_CHUNK;
+const mode = process.env.BUILD_MODE ?? 'standalone';
+console.log('[Next] build mode', mode);
+
+const disableChunk = !!process.env.DISABLE_CHUNK || mode === 'export';
 console.log('[Next] build with chunk: ', !disableChunk);
 
 /** @type {import('next').NextConfig} */
@@ -22,32 +25,41 @@ const nextConfig = {
 
     return config;
   },
-  output: 'standalone',
+  output: mode,
+  images: {
+    unoptimized: mode === 'export',
+  },
   experimental: {
     forceSwcTransforms: true,
   },
-  headers: async () => [
-    {
-      source: '/api/:path*',
-      headers: [
-        { key: 'Access-Control-Allow-Credentials', value: 'true' },
-        { key: 'Access-Control-Allow-Origin', value: '*' },
-        {
-          key: 'Access-Control-Allow-Methods',
-          value: '*',
-        },
-        {
-          key: 'Access-Control-Allow-Headers',
-          value: '*',
-        },
-        {
-          key: 'Access-Control-Max-Age',
-          value: '86400',
-        },
-      ],
-    },
-  ],
-  rewrites: async () => {
+};
+
+if (mode !== 'export') {
+  nextConfig.headers = async () => {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Max-Age',
+            value: '86400',
+          },
+        ],
+      },
+    ];
+  };
+
+  nextConfig.rewrites = async () => {
     const ret = [
       {
         source: '/api/proxy/:path*',
@@ -75,8 +87,8 @@ const nextConfig = {
     return {
       beforeFiles: ret,
     };
-  },
-};
+  };
+}
 
 const withBundleAnalyzer = NextBundleAnalyzer({
   enabled: !!process.env.ANALYZE,
