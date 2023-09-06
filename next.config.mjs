@@ -22,7 +22,7 @@ const nextConfig = {
 
     return config;
   },
-  // output: 'standalone',
+  output: 'standalone',
   experimental: {
     forceSwcTransforms: true,
   },
