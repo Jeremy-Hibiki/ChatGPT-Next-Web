@@ -12,8 +12,8 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import LoadingIcon from '../icons/three-dots.svg';
 
+import { showImageModal } from '../ui';
 import { copyToClipboard } from '../utils';
-import { showImageModal } from './ui-lib';
 
 export function Mermaid(props: { code: string }) {
   const ref = useRef<HTMLDivElement>(null);

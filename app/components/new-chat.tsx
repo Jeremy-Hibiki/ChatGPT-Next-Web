@@ -11,10 +11,8 @@ import Locale from '../locales';
 import { BUILTIN_MASK_STORE } from '../masks';
 import { useAppConfig, useChatStore } from '../store';
 import { Mask, useMaskStore } from '../store/mask';
-import { IconButton } from './button';
-import { EmojiAvatar } from './emoji';
+import { EmojiAvatar, IconButton, showConfirm } from '../ui';
 import { MaskAvatar } from './mask';
-import { showConfirm } from './ui-lib';
 
 import styles from './new-chat.module.scss';
 

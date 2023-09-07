@@ -16,12 +16,20 @@ import { EXPORT_MESSAGE_CLASS_NAME } from '../constant';
 import Locale from '../locales';
 import { ChatMessage, useAppConfig, useChatStore } from '../store';
 import { DEFAULT_MASK_AVATAR } from '../store/mask';
+import {
+  Avatar,
+  IconButton,
+  List,
+  ListItem,
+  Modal,
+  Select,
+  showImageModal,
+  showModal,
+  showToast,
+} from '../ui';
 import { copyToClipboard, downloadAs, useMobileScreen } from '../utils';
 import { prettyObject } from '../utils/format';
-import { IconButton } from './button';
-import { Avatar } from './emoji';
 import { MessageSelector, useMessageSelector } from './message-selector';
-import { List, ListItem, Modal, Select, showImageModal, showModal, showToast } from './ui-lib';
 
 import styles from './exporter.module.scss';
 

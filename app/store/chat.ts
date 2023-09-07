@@ -3,7 +3,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api, RequestMessage } from '../client/api';
 import { ChatControllerPool } from '../client/controller';
-import { showToast } from '../components/ui-lib';
 import {
   DEFAULT_INPUT_TEMPLATE,
   DEFAULT_SYSTEM_TEMPLATE,
@@ -11,6 +10,7 @@ import {
   SUMMARIZE_MODEL,
 } from '../constant';
 import Locale, { getLang } from '../locales';
+import { showToast } from '../ui';
 import { trimTopic } from '../utils';
 import { prettyObject } from '../utils/format';
 import { estimateTokenLength } from '../utils/token';

@@ -8,8 +8,8 @@ import { Path } from '../constant';
 import Locale from '../locales';
 import { useChatStore } from '../store';
 import { Mask } from '../store/mask';
+import { showConfirm } from '../ui';
 import { MaskAvatar } from './mask';
-import { showConfirm } from './ui-lib';
 
 import styles from './home.module.scss';
 

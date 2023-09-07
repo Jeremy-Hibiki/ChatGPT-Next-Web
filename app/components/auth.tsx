@@ -5,7 +5,7 @@ import BotIcon from '../icons/bot.svg';
 import { Path } from '../constant';
 import Locale from '../locales';
 import { useAccessStore } from '../store';
-import { IconButton } from './button';
+import { IconButton } from '../ui';
 
 import styles from './auth.module.scss';
 

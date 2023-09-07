@@ -52,13 +52,21 @@ import {
 } from '../store';
 import { useMaskStore } from '../store/mask';
 import { Prompt, usePromptStore } from '../store/prompt';
+import {
+  Avatar,
+  IconButton,
+  List,
+  ListItem,
+  Modal,
+  Selector,
+  showConfirm,
+  showPrompt,
+  showToast,
+} from '../ui';
 import { autoGrowTextArea, copyToClipboard, selectOrCopy, useMobileScreen } from '../utils';
 import { prettyObject } from '../utils/format';
-import { IconButton } from './button';
-import { Avatar } from './emoji';
 import { ExportMessageModal } from './exporter';
 import { ContextPrompts, MaskAvatar, MaskConfig } from './mask';
-import { List, ListItem, Modal, Selector, showConfirm, showPrompt, showToast } from './ui-lib';
 
 import styles from './chat.module.scss';
 

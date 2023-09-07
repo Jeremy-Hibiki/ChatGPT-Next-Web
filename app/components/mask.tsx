@@ -19,12 +19,21 @@ import { BUILTIN_MASK_STORE } from '../masks';
 import { ChatMessage, createMessage, ModelConfig, useAppConfig, useChatStore } from '../store';
 import { DEFAULT_MASK_AVATAR, Mask, useMaskStore } from '../store/mask';
 import { Updater } from '../typing';
+import {
+  Avatar,
+  AvatarPicker,
+  IconButton,
+  Input,
+  List,
+  ListItem,
+  Modal,
+  Popover,
+  Select,
+  showConfirm,
+} from '../ui';
 import { copyToClipboard, downloadAs, readFromFile } from '../utils';
-import { IconButton } from './button';
-import { Avatar, AvatarPicker } from './emoji';
 import { ErrorBoundary } from './error';
 import { ModelConfigList } from './model-config';
-import { Input, List, ListItem, Modal, Popover, Select, showConfirm } from './ui-lib';
 
 import chatStyle from './chat.module.scss';
 import styles from './mask.module.scss';

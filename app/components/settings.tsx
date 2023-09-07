@@ -25,14 +25,12 @@ import {
 } from '../store';
 import { Prompt, SearchService, usePromptStore } from '../store/prompt';
 import { useSyncStore } from '../store/sync';
-import { copyToClipboard } from '../utils';
-import { IconButton } from './button';
-import { Avatar, AvatarPicker } from './emoji';
-import { ErrorBoundary } from './error';
-import { InputRange } from './input-range';
-import { ModelConfigList } from './model-config';
 import {
+  Avatar,
+  AvatarPicker,
+  IconButton,
   Input,
+  InputRange,
   List,
   ListItem,
   Modal,
@@ -40,7 +38,10 @@ import {
   Popover,
   Select,
   showConfirm,
-} from './ui-lib';
+} from '../ui';
+import { copyToClipboard } from '../utils';
+import { ErrorBoundary } from './error';
+import { ModelConfigList } from './model-config';
 
 import styles from './settings.module.scss';
 

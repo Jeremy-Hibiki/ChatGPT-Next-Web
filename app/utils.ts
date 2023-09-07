@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { showToast } from './components/ui-lib';
 import Locale from './locales';
+import { showToast } from './ui';
 
 export function trimTopic(topic: string) {
   return topic.replace(/[，。！？”“"、,.!?]*$/, '');

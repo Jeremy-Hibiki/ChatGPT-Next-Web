@@ -7,9 +7,8 @@ import ResetIcon from '../icons/reload.svg';
 
 import { ISSUE_URL } from '../constant';
 import Locale from '../locales';
+import { IconButton, showConfirm } from '../ui';
 import { downloadAs } from '../utils';
-import { IconButton } from './button';
-import { showConfirm } from './ui-lib';
 
 interface IErrorBoundaryState {
   hasError: boolean;

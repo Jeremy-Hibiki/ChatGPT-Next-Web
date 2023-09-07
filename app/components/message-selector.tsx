@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import Locale from '../locales';
 import { ChatMessage, useAppConfig, useChatStore } from '../store';
 import { Updater } from '../typing';
-import { IconButton } from './button';
-import { Avatar } from './emoji';
+import { Avatar, IconButton } from '../ui';
 import { MaskAvatar } from './mask';
 
 import styles from './message-selector.module.scss';

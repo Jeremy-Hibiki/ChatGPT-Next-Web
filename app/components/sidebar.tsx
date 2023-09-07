@@ -20,9 +20,8 @@ import {
 } from '../constant';
 import Locale from '../locales';
 import { useAppConfig, useChatStore } from '../store';
+import { IconButton, showConfirm, showToast } from '../ui';
 import { useMobileScreen } from '../utils';
-import { IconButton } from './button';
-import { showConfirm, showToast } from './ui-lib';
 
 import styles from './home.module.scss';
 

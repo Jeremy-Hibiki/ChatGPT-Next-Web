@@ -1,7 +1,6 @@
 import Locale from '../locales';
 import { ModalConfigValidator, ModelConfig, useAppConfig } from '../store';
-import { InputRange } from './input-range';
-import { ListItem, Select } from './ui-lib';
+import { InputRange, ListItem, Select } from '../ui';
 
 export function ModelConfigList(props: {
   modelConfig: ModelConfig;
